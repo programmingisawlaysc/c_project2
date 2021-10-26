@@ -52,7 +52,7 @@ conn.commit()
 
 dif = ['easy','medium','hard']
 for i in range(3):
-    for _ in range(5):
+    for _ in range(1):
         url = f"https://sudoku.com/{dif[i]}/"
         chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  #크롬드라이버 버전 확인
 
@@ -81,16 +81,16 @@ for i in range(3):
         sedoku_table = ['0' for i in  range(0,81)]
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-        image_crop('test1.png', 'C:/Users/deao3/OneDrive/바탕 화면/웹크롤러/')
+        image_crop('test1.png', 'C:/Users/전재민/source/repos/cproject2team/')
         for j in range(0,10):
-            text = pytesseract.image_to_string(Image.open(f"0000{j}.png"),config='--psm 6')
+            text = pytesseract.image_to_string(Image.open(f"C:/Users/전재민/source/repos/cproject2team/0000{j}.png"),config='--psm 6')
             try:
                 sedoku_table[j] = str(int(text[0]))
             except ValueError:
                 pass
             
         for j in range(10,81):
-            text = pytesseract.image_to_string(Image.open(f"000{j}.png"),config='--psm 6')
+            text = pytesseract.image_to_string(Image.open(f"C:/Users/전재민/source/repos/cproject2team/000{j}.png"),config='--psm 6')
             try:
                 sedoku_table[j] = str(int(text[0]))
             except ValueError:
