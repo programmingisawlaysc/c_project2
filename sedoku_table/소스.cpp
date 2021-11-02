@@ -15,4 +15,5 @@ int main() {
 	cout << "hello world";
 	cout << "hello world";
 	printf("hello world jaemin");
+	printf("hello");
 }
