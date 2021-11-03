@@ -122,10 +122,7 @@ int main() {
 			}
 		}
 	}
-
-    
-    
-	for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 1; j++) {
 			for (int p = 0; p < 9; p++) {
 				for (int q = 0; q < 9; q++) {
@@ -136,12 +133,9 @@ int main() {
 			}
 		}
 	}
-  
-
     // 끝
- 
-   
-for (int q = 0; q < 4; q++) {
+    //각요소들에 대해 백트래킹으로 돌리고 그값을 받아온는 부분
+    for (int q = 0; q < 4; q++) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (sedoku_table[q][1][i][j] == 0) xy.push_back(make_pair(i, j));
@@ -153,8 +147,7 @@ for (int q = 0; q < 4; q++) {
         istrue = false;
 
     }
-    
-
+    //끝
 
 	
 

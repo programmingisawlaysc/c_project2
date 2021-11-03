@@ -46,12 +46,12 @@ cousor.execute('use sedoku_table;')
 cousor.execute(f'CREATE TABLE sedoku (id INT(16) NOT NULL AUTO_INCREMENT,dif VARCHAR(100) NOT NULL,sedoku_table VARCHAR(100) not NULL,PRIMARY KEY(id));') # 스키마에 들어가는 각요소들을 선언한다.
  #sedoku_table 스키마 사용 선언
 conn.commit()
-    
+     
 
 #코드 끝 --
 
 dif = ['easy','medium','hard']
-for i in range(3):
+for i in range(1):
     for _ in range(1):
         url = f"https://sudoku.com/{dif[i]}/"
         chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  #크롬드라이버 버전 확인
@@ -81,16 +81,16 @@ for i in range(3):
         sedoku_table = ['0' for i in  range(0,81)]
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-        image_crop('test1.png', 'C:/Users/deao3/source/repos/cproject2team/')
+        image_crop('test1.png', 'C:/Users/deao3/OneDrive/문서/GitHub/c_project2/image/')
         for j in range(0,10):
-            text = pytesseract.image_to_string(Image.open(f"C:/Users/deao3/source/repos/cproject2team/0000{j}.png"),config='--psm 6')
+            text = pytesseract.image_to_string(Image.open(f"C:/Users/deao3/OneDrive/문서/GitHub/c_project2/image/0000{j}.png"),config='--psm 6')
             try:
                 sedoku_table[j] = str(int(text[0]))
             except ValueError:
                 pass
             
         for j in range(10,81):
-            text = pytesseract.image_to_string(Image.open(f"C:/Users/deao3/source/repos/cproject2team/000{j}.png"),config='--psm 6')
+            text = pytesseract.image_to_string(Image.open(f"C:/Users/deao3/OneDrive/문서/GitHub/c_project2/image/000{j}.png"),config='--psm 6')
             try:
                 sedoku_table[j] = str(int(text[0]))
             except ValueError:
@@ -101,5 +101,6 @@ for i in range(3):
         conn.commit()
 
         #코드 끝 -- 
+print(":> end")
 conn.commit()
 conn.close() 
