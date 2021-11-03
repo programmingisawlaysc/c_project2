@@ -12,5 +12,5 @@ int sedoku_table_easy_answer[10][10] = { {1, 3, 5, 4 ,6 ,9 ,2 ,7, 8},{7, 8 ,2 ,1
 };
 
 int main() {
-	
+	printf("hello world ¹ÚÇö¼­")
 }
