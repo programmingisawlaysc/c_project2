@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sedoku_game_database", "Project2\Project2.vcxproj", "{9DE65882-D9AE-4B17-877D-58383ED9D3E4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D4C4C260-744C-4E9E-976D-75484ED2D96D} = {D4C4C260-744C-4E9E-976D-75484ED2D96D}
+	EndProjectSection
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonApplication2", "PythonApplication2\PythonApplication2.pyproj", "{4CE4C996-FFAC-46F7-85EE-40C367E71B64}"
 EndProject

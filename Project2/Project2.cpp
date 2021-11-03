@@ -64,7 +64,7 @@ void dfs(int cnt,int count_num) {
     }
     if (cnt == xy.size()) {
         istrue = true;
-        print_sedoku(count_num);
+        //해당코드는 확인하고 싶을때만 주석처리를 해줍니다.print_sedoku(count_num);
         return;
     }
 
