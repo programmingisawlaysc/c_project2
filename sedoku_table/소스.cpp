@@ -79,7 +79,7 @@ void draw_check02(int c, int r)
 	for (j = 0; j < c; j++)
 	{
 		printf(" ");
-		printf("1");
+		printf("1");//<- 내가 수정한부분
 		printf(" ");
 		printf("%c%c", a, b[2]);
 	}
