@@ -16,20 +16,9 @@ int sedoku_table_easy_answer[10][10] = { {1, 3, 5, 4 ,6 ,9 ,2 ,7, 8},{7, 8 ,2 ,1
 	{2, 5, 8, 3, 9, 4, 7, 6, 1}
 };
 
-int main() {
+int main(void) {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
-	int row, column;
-	printf("확장된 바둑판 그리기\n\n");
-	printf("가로와 세로의 길이를 space로\n");
-	printf("분라하여 입력하고 Enter>");
-	cin >> column >> row;
-	draw_check02(column ,row);
-	return 0;
-
-
-}
-void draw_check02(int c, int r)
-{
+	
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
@@ -41,7 +30,7 @@ void draw_check02(int c, int r)
 	printf("%c%c", a, b[3]);
 	// The following line was added to double the horizontal line
 	printf("%c%c", a, b[1]);
-	for (i = 0; i < c - 1; i++)
+	for (i = 0; i < 8; i++)
 	{
 		printf("%c%c%c%c", a, b[1], a, b[1]);
 		printf("%c%c", a, b[8]);
@@ -52,40 +41,39 @@ void draw_check02(int c, int r)
 	printf("%c%c", a, b[4]);
 	printf("\n");
 	// the following code print the middle grids.
-	for (i = 0; i < r - 1; i++)
+	for (i = 0; i < 8; i++)
 	{
 		printf("%c%c", a, b[2]);
-		for (j = 0; j < c; j++)
+		for (j = 0; j < 9; j++)
 		{
 			printf(" ");
-			printf("1"); //<- 내가 수정한 부분
+			printf(" "); //<- 내가 수정한 부분
 			printf(" ");
 			printf("%c%c", a, b[2]);
 		}
 		printf("\n");
 		printf("%c%c", a, b[7]);
-		for (j = 0; j < c - 1; j++)
+		for (j = 0; j < 8; j++)
 		{
 			printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 			printf("%c%c", a, b[11]);
 		}
-		// printf("%c%c", a, b[1]);
 		printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 		printf("%c%c", a, b[9]);
 		printf("\n");
 	}
 	// The following code prints the last line of the grid.
 	printf("%c%c", a, b[2]);
-	for (j = 0; j < c; j++)
+	for (j = 0; j < 9; j++)
 	{
 		printf(" ");
-		printf("1");//<- 내가 수정한부분
+		printf(" ");//<- 내가 수정한부분
 		printf(" ");
 		printf("%c%c", a, b[2]);
 	}
 	printf("\n");
 	printf("%c%c", a, b[6]);
-	for (i = 0; i < c - 1; i++)
+	for (i = 0; i < 8; i++)
 	{
 		printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 		printf("%c%c", a, b[10]);
@@ -95,5 +83,6 @@ void draw_check02(int c, int r)
 	printf("\n");
 	getchar();
 	getchar();
+
 
 }
