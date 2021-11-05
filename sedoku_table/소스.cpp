@@ -134,7 +134,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		break;
 	case 75:// 왼쪽(좌) 방향의 화살표 키 입력
 		*x1 = *x1 - 4;
-		if (*x1 < 2)*x1 = 1;// x 좌표의 최솟값
+		if (*x1 < 1)*x1 = 1;// x 좌표의 최솟값
 		break;
 	case 77:// 오른쪽(우) 방향의 화살표 키 입력
 		*x1 = *x1 + 4;
