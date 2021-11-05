@@ -1,2 +1,3 @@
-# c_project2
-about c programing
+# c_project2 - sedoku -game
+저희 조의 프로젝트는 스도쿠 게임 만들기입니다.
+프로젝트는 총 3부분으로 나눠집니다.
