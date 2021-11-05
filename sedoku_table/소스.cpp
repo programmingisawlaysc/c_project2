@@ -1,8 +1,13 @@
 #include <iostream>
 #include <stdio.h>
+#include <conio.h>
 #include <Windows.h>
 extern void draw_plate(int column, int row);
+void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
+void gotoxy(int x, int y);
 
+#define X_MAX 35// 가로(열) 방향의 최대값
+#define Y_MAX 18// 세로(행) 방향의 최대값
 
 using namespace std;
 // 해당 스도쿠 테이블값들은 데이터베이스와 알고리즘 없이도 쉽게 코딩을 할수 있도록 설정해놓은 값들입니다. 해당값들을 이용하여 스도쿠 게임을 제작하세요.
@@ -33,13 +38,23 @@ int sedoku_table_easy_answer[10][10] = {
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
 	int row, column;
+	char key;
+	int x = 3, y = 2;
 	row = 9;
 	column = 9;
 	
-	draw_plate(column, row);
+	while (1) {
+		draw_plate(column, row);
+		gotoxy(49, 10);
+		printf("%d %d", x, y);
+		gotoxy(x, y);
+		key = getch();
+		move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
+		Sleep(10);
+		system("cls");
+	}
+
 	return 0;
-
-
 }
 
 void draw_plate(int column, int row) // 스도쿠 판 출력 함수
@@ -106,7 +121,34 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 	printf("%c%c", a, b[5]);
 	printf("\n");
-	getchar();
-	getchar();
+}
 
+void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
+{
+	switch (key)
+	{
+	case 72:// 위쪽(상) 방향의 화살표 키 입력
+		*y1 = *y1 - 2;
+		if (*y1 < 2)*y1 = 2;// y좌표의 최솟값
+		break;
+	case 75:// 왼쪽(좌) 방향의 화살표 키 입력
+		*x1 = *x1 - 4;
+		if (*x1 < 1)*x1 = 1;// x 좌표의 최솟값
+		break;
+	case 77:// 오른쪽(우) 방향의 화살표 키 입력
+		*x1 = *x1 + 4;
+		if (*x1 > x_b)*x1 = x_b;// x 좌표의 최대값
+		break;
+	case 80:// 아래쪽(하) 방향의 화살표 키 입력
+		*y1 = *y1 + 2;
+		if (*y1 > y_b)*y1 = y_b;// y 좌표의 최대값
+		break;
+	default:
+		return;
+	}
+}
+
+void gotoxy(int x, int y) {
+	COORD Pos = { x - 1, y - 1 };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
