@@ -1,11 +1,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <Windows.h>
-extern void draw_check02(int column, int row);
+extern void draw_plate(int column, int row);
 
 
 using namespace std;
-// ÇØ´ç ½ºµµÄí Å×ÀÌºí°ªµéÀº µ¥ÀÌÅÍº£ÀÌ½º¿Í ¾Ë°í¸®Áò ¾øÀÌµµ ½±°Ô ÄÚµùÀ» ÇÒ¼ö ÀÖµµ·Ï ¼³Á¤ÇØ³õÀº °ªµéÀÔ´Ï´Ù. ÇØ´ç°ªµéÀ» ÀÌ¿ëÇÏ¿© ½ºµµÄí °ÔÀÓÀ» Á¦ÀÛÇÏ¼¼¿ä.
+// í•´ë‹¹ ìŠ¤ë„ì¿  í…Œì´ë¸”ê°’ë“¤ì€ ë°ì´í„°ë² ì´ìŠ¤ì™€ ì•Œê³ ë¦¬ì¦˜ ì—†ì´ë„ ì‰½ê²Œ ì½”ë”©ì„ í• ìˆ˜ ìˆë„ë¡ ì„¤ì •í•´ë†“ì€ ê°’ë“¤ì…ë‹ˆë‹¤. í•´ë‹¹ê°’ë“¤ì„ ì´ìš©í•˜ì—¬ ìŠ¤ë„ì¿  ê²Œì„ì„ ì œì‘í•˜ì„¸ìš”.
 
 int sedoku_table_easy[10][10] = { {0, 3, 5, 4 ,6 ,9 ,2 ,7, 8},{7, 8 ,2 ,1 ,0 ,5 ,6 ,0, 9
 },{0, 6, 0, 2, 7, 8, 1, 3, 5},{3, 2 ,1 ,0 ,4 ,6 ,8 ,9 ,7 },{ 8, 0, 4, 9, 1, 3, 5, 0, 6}, {5, 9, 6, 8, 2, 0, 4, 1, 3}, { 9 ,1 ,7 ,6, 5, 2, 0, 8, 0}, {6 ,0 ,3 ,7 ,0, 1, 9, 5, 2},
@@ -16,13 +16,25 @@ int sedoku_table_easy_answer[10][10] = { {1, 3, 5, 4 ,6 ,9 ,2 ,7, 8},{7, 8 ,2 ,1
 	{2, 5, 8, 3, 9, 4, 7, 6, 1}
 };
 
-int main(void) {
-	//github desktopÀ» ÀÌ¿ëÇØ¼­ push¿Í pullÀ» ÇØºÃÀ¸´Ï hello¹®À» Áö¿ü½À´Ï´Ù.
-	
+int main() {
+	//github desktopì„ ì´ìš©í•´ì„œ pushì™€ pullì„ í•´ë´¤ìœ¼ë‹ˆ helloë¬¸ì„ ì§€ì› ìŠµë‹ˆë‹¤.
+
+	int row, column;
+	row = 9;
+	column = 9;
+
+	draw_plate(column, row);
+	return 0;
+
+  
+}
+
+void draw_plate(int column, int row) // ìŠ¤ë„ì¿  íŒ ì¶œë ¥ í•¨ìˆ˜
+{
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
-	for (i = 1; i < 12; i++)
+	for (i = 1; i < 12; i++) // ìŠ¤ë„ì¿  í…Œë‘ë¦¬ ëª¨ì–‘ ì €ì¥ ex) {"â”", "â”", "â”¯", "â”“"},
 	{
 		b[i] = 0xa0 + i;
 	}
@@ -30,7 +42,7 @@ int main(void) {
 	printf("%c%c", a, b[3]);
 	// The following line was added to double the horizontal line
 	printf("%c%c", a, b[1]);
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < column - 1; i++)
 	{
 		printf("%c%c%c%c", a, b[1], a, b[1]);
 		printf("%c%c", a, b[8]);
@@ -41,19 +53,19 @@ int main(void) {
 	printf("%c%c", a, b[4]);
 	printf("\n");
 	// the following code print the middle grids.
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < row - 1; i++)
 	{
 		printf("%c%c", a, b[2]);
-		for (j = 0; j < 9; j++)
+		for (j = 0; j < column; j++)
 		{
-			printf(" ");
-			printf(" "); //<- ³»°¡ ¼öÁ¤ÇÑ ºÎºĞ
-			printf(" ");
+			printf(" "); // ìŠ¤ë„ì¿  ì¹¸ ì˜¤ë¥¸ìª½ ê³µë°±
+			printf(" "); // ìŠ¤ë„ì¿  ì¹¸ ê°€ìš´ë° ê³µë°±
+			printf(" "); // ìŠ¤ë„ì¿  ì¹¸ ì™¼ìª½ ê³µë°±
 			printf("%c%c", a, b[2]);
 		}
 		printf("\n");
 		printf("%c%c", a, b[7]);
-		for (j = 0; j < 8; j++)
+		for (j = 0; j < column - 1; j++)
 		{
 			printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 			printf("%c%c", a, b[11]);
@@ -64,16 +76,16 @@ int main(void) {
 	}
 	// The following code prints the last line of the grid.
 	printf("%c%c", a, b[2]);
-	for (j = 0; j < 9; j++)
+	for (j = 0; j < column; j++)
 	{
-		printf(" ");
-		printf(" ");//<- ³»°¡ ¼öÁ¤ÇÑºÎºĞ
-		printf(" ");
+		printf(" "); // ìŠ¤ë„ì¿  ì¹¸ ì˜¤ë¥¸ìª½ ê³µë°±
+		printf(" "); // ìŠ¤ë„ì¿  ì¹¸ ê°€ìš´ë° ê³µë°±
+		printf(" "); // ìŠ¤ë„ì¿  ì¹¸ ì™¼ìª½ ê³µë°±
 		printf("%c%c", a, b[2]);
 	}
 	printf("\n");
 	printf("%c%c", a, b[6]);
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < column - 1; i++)
 	{
 		printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 		printf("%c%c", a, b[10]);
