@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <Windows.h>
-extern void draw_check02(int column, int row);
+extern void draw_plate(int column, int row);
 
 
 using namespace std;
@@ -19,21 +19,21 @@ int sedoku_table_easy_answer[10][10] = { {1, 3, 5, 4 ,6 ,9 ,2 ,7, 8},{7, 8 ,2 ,1
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
 	int row, column;
-	printf("확장된 바둑판 그리기\n\n");
-	printf("가로와 세로의 길이를 space로\n");
-	printf("분라하여 입력하고 Enter>");
-	cin >> column >> row;
-	draw_check02(column ,row);
+	row = 9;
+	column = 9;
+
+	draw_plate(column, row);
 	return 0;
 
 
 }
-void draw_check02(int c, int r)
+
+void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 {
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
-	for (i = 1; i < 12; i++)
+	for (i = 1; i < 12; i++) // 스도쿠 테두리 모양 저장 ex) {"┏", "━", "┯", "┓"},
 	{
 		b[i] = 0xa0 + i;
 	}
@@ -41,7 +41,7 @@ void draw_check02(int c, int r)
 	printf("%c%c", a, b[3]);
 	// The following line was added to double the horizontal line
 	printf("%c%c", a, b[1]);
-	for (i = 0; i < c - 1; i++)
+	for (i = 0; i < column - 1; i++)
 	{
 		printf("%c%c%c%c", a, b[1], a, b[1]);
 		printf("%c%c", a, b[8]);
@@ -52,40 +52,39 @@ void draw_check02(int c, int r)
 	printf("%c%c", a, b[4]);
 	printf("\n");
 	// the following code print the middle grids.
-	for (i = 0; i < r - 1; i++)
+	for (i = 0; i < row - 1; i++)
 	{
 		printf("%c%c", a, b[2]);
-		for (j = 0; j < c; j++)
+		for (j = 0; j < column; j++)
 		{
-			printf(" ");
-			printf("1"); //<- 내가 수정한 부분
-			printf(" ");
+			printf(" "); // 스도쿠 칸 오른쪽 공백
+			printf(" "); // 스도쿠 칸 가운데 공백
+			printf(" "); // 스도쿠 칸 왼쪽 공백
 			printf("%c%c", a, b[2]);
 		}
 		printf("\n");
 		printf("%c%c", a, b[7]);
-		for (j = 0; j < c - 1; j++)
+		for (j = 0; j < column - 1; j++)
 		{
 			printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 			printf("%c%c", a, b[11]);
 		}
-		// printf("%c%c", a, b[1]);
 		printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 		printf("%c%c", a, b[9]);
 		printf("\n");
 	}
 	// The following code prints the last line of the grid.
 	printf("%c%c", a, b[2]);
-	for (j = 0; j < c; j++)
+	for (j = 0; j < column; j++)
 	{
-		printf(" ");
-		printf("1");//<- 내가 수정한부분
-		printf(" ");
+		printf(" "); // 스도쿠 칸 오른쪽 공백
+		printf(" "); // 스도쿠 칸 가운데 공백
+		printf(" "); // 스도쿠 칸 왼쪽 공백
 		printf("%c%c", a, b[2]);
 	}
 	printf("\n");
 	printf("%c%c", a, b[6]);
-	for (i = 0; i < c - 1; i++)
+	for (i = 0; i < column - 1; i++)
 	{
 		printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 		printf("%c%c", a, b[10]);
