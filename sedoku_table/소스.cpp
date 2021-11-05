@@ -46,8 +46,6 @@ int main() {
 		draw_plate(column, row);
 		gotoxy(49, 10);
 		printf("%d %d", x, y);
-		gotoxy(35, 2);
-		printf(";");
 		gotoxy(x, y);
 		printf("\r*");
 		key = getch();
