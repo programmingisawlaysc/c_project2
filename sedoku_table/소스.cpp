@@ -35,6 +35,9 @@ int sedoku_table_easy_answer[10][10] = {
 	{2, 5, 8, 3, 9, 4, 7, 6, 1}
 };
 
+extern int numx = 0; // 배열 위치 선정
+extern int numy = 0;
+
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
 	int row, column;
@@ -43,17 +46,19 @@ int main() {
 	row = 9;
 	column = 9;
 	
+	
 	while (1) {
+
 		draw_plate(column, row);
 		gotoxy(49, 10);
 		printf("%d %d", x, y);
 		gotoxy(x, y);
-		key = getch();
+		key = _getch();
 		move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
 		Sleep(10);
 		system("cls");
 	}
-
+	
 	return 0;
 }
 
@@ -129,24 +134,81 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 	{
 	case 72:// 위쪽(상) 방향의 화살표 키 입력
 		*y1 = *y1 - 2;
-		if (*y1 < 2)*y1 = 2;// y좌표의 최솟값
-		break;
+		if (*y1 < 2) {
+			*y1 = 2; // y좌표의 최솟값
+			numy = 0; // 좌표값이 최대일 경우 배열 값도 최대를 넘지 않도록 고정
+			break; 
+		}
+		else {
+			numy = numy - 1; // 커서의 움직임에 따라 배열 위치 선택
+			break;
+		}
 	case 75:// 왼쪽(좌) 방향의 화살표 키 입력
 		*x1 = *x1 - 4;
-		if (*x1 < 1)*x1 = 1;// x 좌표의 최솟값
-		break;
+		if (*x1 < 3) {
+			*x1 = 3; // x 좌표의 최솟값
+			numx = 0; // 좌표값이 최대일 경우 배열 값도 최대를 넘지 않도록 고정
+			break;
+		}
+		else {
+			numx = numx - 1; // 커서의 움직임에 따라 배열 위치 선택
+			break;
+		}
 	case 77:// 오른쪽(우) 방향의 화살표 키 입력
 		*x1 = *x1 + 4;
-		if (*x1 > x_b)*x1 = x_b;// x 좌표의 최대값
-		break;
+		if (*x1 > x_b) {
+			*x1 = x_b; // x 좌표의 최대값
+			numx = 8; // 좌표값이 최대일 경우 배열 값도 최대를 넘지 않도록 고정
+			break;
+		}
+		else {
+			numx = numx + 1; // 커서의 움직임에 따라 배열 위치 선택
+			break;
+		}
 	case 80:// 아래쪽(하) 방향의 화살표 키 입력
 		*y1 = *y1 + 2;
-		if (*y1 > y_b)*y1 = y_b;// y 좌표의 최대값
+		if (*y1 > y_b) {
+			*y1 = y_b;// y 좌표의 최대값
+			numy = 8; // 좌표값이 최대일 경우 배열 값도 최대를 넘지 않도록 고정
+			break;
+		}
+		else {
+			numy = numy + 1; // 커서의 움직임에 따라 배열 위치 선택
+			break;
+		}
+	case 49:
+		sedoku_table_easy[numy][numx] = 1;  //해당하는 배열의 수를 1로 변경
+		break;
+	case 50:
+		sedoku_table_easy[numy][numx] = 2;  //해당하는 배열의 수를 2로 변경
+		break;
+	case 51:
+		sedoku_table_easy[numy][numx] = 3;  //해당하는 배열의 수를 3으로 변경
+		break;
+	case 52:
+		sedoku_table_easy[numy][numx] = 4;  //해당하는 배열의 수를 4로 변경
+		break;
+	case 53:
+		sedoku_table_easy[numy][numx] = 5;  //해당하는 배열의 수를 5로 변경
+		break;
+	case 54:
+		sedoku_table_easy[numy][numx] = 6;  //해당하는 배열의 수를 6으로 변경
+		break;
+	case 55:
+		sedoku_table_easy[numy][numx] = 7;  //해당하는 배열의 수를 7로 변경
+		break;
+	case 56:
+		sedoku_table_easy[numy][numx] = 8;  //해당하는 배열의 수를 8로 변경
+		break;
+	case 57:
+		sedoku_table_easy[numy][numx] = 9;  //해당하는 배열의 수를 9로 변경
 		break;
 	default:
 		return;
 	}
 }
+
+
 
 void gotoxy(int x, int y) {
 	COORD Pos = { x - 1, y - 1 };
