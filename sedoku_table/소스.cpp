@@ -2,17 +2,35 @@
 #include <stdio.h>
 #include <conio.h>
 #include <Windows.h>
+#include <iostream>
+#include<vector>
+#include<stdlib.h>
+#include<utility>
+#include<string>
+using namespace std;
 extern void draw_plate(int column, int row);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
 void gotoxy(int x, int y);
+void print_sedoku(int count_num);
+void check1(bool check[], int x, int count_num);
+void check2(bool check[], int y, int count_num);
+void check3(bool check[], int x, int y, int count_num);
+void dfs(int cnt, int count_num);
+void find_sedoku();
+
+// 스도쿠 배열에 대해서 전역변수를 선언했습니다. 전역변수를 최대한 사용하지않게 추후에 고치겠습니다.
+int sedoku_table[16][2][9][9];
+vector<pair<int, int>> xy;
+vector<string>  sedoku_set[16];
+bool isture = false;
 
 #define X_MAX 35// 가로(열) 방향의 최대값
 #define Y_MAX 18// 세로(행) 방향의 최대값
 
-using namespace std;
+
 // 해당 스도쿠 테이블값들은 데이터베이스와 알고리즘 없이도 쉽게 코딩을 할수 있도록 설정해놓은 값들입니다. 해당값들을 이용하여 스도쿠 게임을 제작하세요.
 
-int sedoku_table_easy[10][10] = { 
+int sedoku_table_easy[10][10] = {
 	{0, 3, 5, 4 ,6 ,9 ,2 ,7, 8},
 	{7, 8 ,2 ,1 ,0 ,5 ,6 ,0, 9},
 	{0, 6, 0, 2, 7, 8, 1, 3, 5},
@@ -23,7 +41,7 @@ int sedoku_table_easy[10][10] = {
 	{6 ,0 ,3 ,7 ,0, 1, 9, 5, 2},
 	{2, 5, 8, 3, 9, 4, 7, 6, 0}
 };
-int sedoku_table_easy_answer[10][10] = { 
+int sedoku_table_easy_answer[10][10] = {
 	{1, 3, 5, 4 ,6 ,9 ,2 ,7, 8},
 	{7, 8 ,2 ,1 ,3 ,5 ,6 ,4, 9},
 	{4, 6, 9, 2, 7, 8, 1, 3, 5},
@@ -45,8 +63,8 @@ int main() {
 	int x = 3, y = 2;
 	row = 9;
 	column = 9;
-	
-	
+	find_sedoku();
+
 	while (1) {
 
 		draw_plate(column, row);
@@ -57,8 +75,10 @@ int main() {
 		move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
 		Sleep(10);
 		system("cls");
+
 	}
-	
+
+
 	return 0;
 }
 
@@ -137,7 +157,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		if (*y1 < 2) {
 			*y1 = 2; // y좌표의 최솟값
 			numy = 0; // 좌표값이 최대일 경우 배열 값도 최대를 넘지 않도록 고정
-			break; 
+			break;
 		}
 		else {
 			numy = numy - 1; // 커서의 움직임에 따라 배열 위치 선택
@@ -213,4 +233,133 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 void gotoxy(int x, int y) {
 	COORD Pos = { x - 1, y - 1 };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+}
+void print_sedoku(int count_num) {
+
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			cout << sedoku_table[count_num][1][i][j] << " ";
+
+		}
+		cout << "\n";
+	}
+}
+void check1(bool check[], int x, int count_num) {
+	for (int i = 0; i < 9; i++) {
+		if (sedoku_table[count_num][1][x][i] != 0) {
+			int where = sedoku_table[count_num][1][x][i] - 1;
+			check[where] = true;
+		}
+	}
+
+}
+
+void check2(bool check[], int y, int count_num) {
+	for (int i = 0; i < 9; i++) {
+		if (sedoku_table[count_num][1][i][y] != 0) {
+			int where = sedoku_table[count_num][1][i][y] - 1;
+			if (check[where] == false) {
+				check[where] = true;
+			}
+		}
+	}
+}
+void check3(bool check[], int x, int y, int count_num) {
+	int xx = x / 3;
+	int yy = y / 3;
+	for (int i = 3 * xx; i < 3 * xx + 3; i++) {
+		for (int j = 3 * yy; j < yy * 3 + 3; j++) {
+			if (sedoku_table[count_num][1][i][j] != 0) {
+				int where = sedoku_table[count_num][1][i][j] - 1;
+				if (check[where] == false) {
+					check[where] = true;
+				}
+
+			}
+		}
+	}
+
+}
+bool istrue = false;
+void dfs(int cnt, int count_num) {
+
+	if (istrue == true) {
+		return;
+	}
+	if (cnt == xy.size()) {
+		istrue = true;
+		//해당코드는 확인하고 싶을때만 주석처리를 해줍니다.print_sedoku(count_num);
+		return;
+	}
+
+	int x = xy[cnt].first;
+	int y = xy[cnt].second;
+	bool can[9] = { false,false,false,false,false,false,false,false };
+	check1(can, x, count_num);
+
+	check2(can, y, count_num);
+
+	check3(can, x, y, count_num);
+
+
+	//xy좌표로 가능한 리스트 불러온다
+	for (int i = 0; i < 9; i++) {
+		if (can[i] == false) {
+			sedoku_table[count_num][1][x][y] = i + 1;
+			dfs(cnt + 1, count_num);
+			if (istrue == true) {
+				return;
+			}
+			sedoku_table[count_num][1][x][y] = 0;
+
+
+
+		}
+	}
+}
+void find_sedoku() {
+
+	sedoku_set[0].push_back("004130020900000600802509000001003000000890406400000093730904162150000800240718059");
+	sedoku_set[1].push_back("106009000000300010290000406607095843532018690040073000005900301020006000000504760");
+	sedoku_set[2].push_back("000200086100890007030000912345170600090052000706943058000004005007519043004306000");
+	sedoku_set[3].push_back("070000060000067105005029304009076501700000000310045820038001090507693018090480050");
+	sedoku_set[4].push_back("006157800010390005053080090827009000649800000030070900000400308074920501180060029");
+	sedoku_set[5].push_back("900000083000082409870940000030097005500020000600105890056000300000356947000000500");
+	sedoku_set[6].push_back("910056003000800000260000500009420008806000030540080000004100805000090070380700029");
+	sedoku_set[7].push_back("840000102502008000000032084050790000384000759090000000900050308028007960000009001");
+	sedoku_set[8].push_back("030000694740000010006080000070400209500000070020700001004002100250001046003049008");
+	sedoku_set[9].push_back("130400000500060030000000209407013060000204190900080002800340900300006801000001003");
+	sedoku_set[10].push_back("003600000900800207000000000040150830070004000820000000090005308500760400000000560");
+	sedoku_set[11].push_back("000000030105000040300209650753000010000063000090500000000095000031720004049010500");
+	sedoku_set[12].push_back("900402500000901000050000007400020080002000734508006000000800020700000001090260000");
+	sedoku_set[13].push_back("308900010029005700061000020030400157045010000006003200000500000200000030600007009");
+	sedoku_set[14].push_back("000201000002005009050080006000000000300050090080070004040090070020000010008710030");
+
+
+	for (int i = 0; i < 15; i++) {
+		for (int j = 0; j < 1; j++) {
+			for (int p = 0; p < 9; p++) {
+				for (int q = 0; q < 9; q++) {
+					int num = sedoku_set[i][j][p * 9 + q] - '0';
+					sedoku_table[i][j][p][q] = num;
+					sedoku_table[i][1][p][q] = num;
+				}
+			}
+		}
+	}
+	// 끝
+
+	//각요소들에 대해 백트래킹으로 돌리고 그값을 받아온는 부분
+	for (int q = 0; q < 15; q++) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (sedoku_table[q][1][i][j] == 0) xy.push_back(make_pair(i, j));
+			}
+		}
+		dfs(0, q);
+		xy.clear();
+		vector<pair<int, int>>().swap(xy);//vector 초기화
+		istrue = false;
+
+	}
 }
