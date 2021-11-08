@@ -229,7 +229,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 		}
 	case 49:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 1;  //해당하는 배열의 수를 1로 변경
 			break;
@@ -237,7 +237,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 50:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 2;  //해당하는 배열의 수를 2로 변경
 			break;
@@ -245,7 +245,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 51:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 3;  //해당하는 배열의 수를 3로 변경
 			break;
@@ -253,7 +253,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 52:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 4;  //해당하는 배열의 수를 4로 변경
 			break;
@@ -261,7 +261,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 53:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 5;  //해당하는 배열의 수를 5로 변경
 			break;
@@ -269,7 +269,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 54:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 6;  //해당하는 배열의 수를 6로 변경
 			break;
@@ -277,7 +277,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 55:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 7;  //해당하는 배열의 수를 7로 변경
 			break;
@@ -285,7 +285,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 56:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 8;  //해당하는 배열의 수를 8로 변경
 			break;
@@ -293,7 +293,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 57:
-		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 9;  //해당하는 배열의 수를 9로 변경
 			break;
