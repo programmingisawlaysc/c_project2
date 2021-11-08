@@ -14,6 +14,7 @@ void init();
 void titleDraw(); //게임 제목 출력)
 int menuDraw();
 void textcolor();
+void CursorView();
 extern void draw_plate(int column, int row);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
 void gotoxy(int x, int y);
@@ -24,8 +25,9 @@ void check3(bool check[], int x, int y, int count_num);
 void dfs(int cnt, int count_num);
 void find_sedoku();
 
+
 // 스도쿠 배열에 대해서 전역변수를 선언했습니다. 전역변수를 최대한 사용하지않게 추후에 고치겠습니다.
-int sedoku_table[16][2][9][9];
+int sedoku_table[16][3][9][9];
 vector<pair<int, int>> xy;
 vector<string>  sedoku_set[16];
 bool isture = false;
@@ -70,22 +72,25 @@ extern int numy = 0;
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
 	
-	//게임 시작화면 -  코딩할때는 주석풀고하세용.
+	//게임 시작화면 - 시작화면 코딩할때는 주석풀고하세용.
+	/*
 	init();
 	titleDraw();
 	int menuCode = menuDraw();
 	printf("선택한 메뉴: %d\n", menuCode);
+	system("cls");
 	
-
-	/* // 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
+	CursorView(); // <- 메뉴코드에서 커서 숨김처리 되서 이걸로 다시 커서 나타내요
+	*/
+	 // 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
 	int row, column;
 	char key;
 	int x = 3, y = 2;
 	row = 9;
 	column = 9;
 	find_sedoku();
-	
 	while (1) {
+
 
 		draw_plate(column, row);
 		gotoxy(49, 10);
@@ -97,7 +102,7 @@ int main() {
 		system("cls");
 
 	}
-	*/
+	
 	
 
 
@@ -365,6 +370,7 @@ void find_sedoku() {
 					int num = sedoku_set[i][j][p * 9 + q] - '0';
 					sedoku_table[i][j][p][q] = num;
 					sedoku_table[i][1][p][q] = num;
+					sedoku_table[i][2][p][q] = num;
 				}
 			}
 		}
@@ -418,6 +424,14 @@ void init() // 콘솔 창 설정 함수
 	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
 	CONSOLE_CURSOR_INFO ConsoleCursor;
 	ConsoleCursor.bVisible = 0;
+	ConsoleCursor.dwSize = 1;
+	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
+}
+void CursorView()
+{
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+	ConsoleCursor.bVisible = true;
 	ConsoleCursor.dwSize = 1;
 	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
 }
