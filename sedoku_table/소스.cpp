@@ -13,7 +13,7 @@ int keyControl();
 void init();
 void titleDraw(); //게임 제목 출력)
 int menuDraw();
-void textcolor();
+void textcolor(int color_number);
 void CursorView();
 extern void draw_plate(int column, int row);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
@@ -143,15 +143,17 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 		printf("%c%c", a, b[2]);
 		for (j = 0; j < column; j++)
 		{
+			textcolor(15);
 			printf(" "); // 스도쿠 칸 오른쪽 공백
 			if (sedoku_table[sedoku_quiz][sedoku_default][i][j] == 0) { //원래의 값이 0이면 색깔을 노란색으로
 				textcolor(14); //14: 노란색
-				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][8][j]); // sedoku_table 배열 숫자 출력
+				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table 배열 숫자 출력
 			}
 			else {
 				textcolor(15); //15: 흰색
-				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][8][j]); // sedoku_table 배열 숫자 출력
+				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table 배열 숫자 출력
 			}
+			textcolor(15);
 			printf(" "); // 스도쿠 칸 왼쪽 공백
 			printf("%c%c", a, b[2]);
 		}
@@ -170,15 +172,17 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	printf("%c%c", a, b[2]);
 	for (j = 0; j < column; j++)
 	{
+		textcolor(15);
 		printf(" "); // 스도쿠 칸 오른쪽 공백
 		if (sedoku_table[sedoku_quiz][sedoku_default][i][j] == 0) { //원래의 값이 0이면 색깔을 노란색으로
 			textcolor(14); //14: 노란색
-			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][8][j]); // sedoku_table 배열 숫자 출력
+			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table 배열 숫자 출력
 		}
 		else {
 			textcolor(15); //15: 흰색
-			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][8][j]); // sedoku_table 배열 숫자 출력
+			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table 배열 숫자 출력
 		}
+		textcolor(15);
 		printf(" "); // 스도쿠 칸 왼쪽 공백
 		printf("%c%c", a, b[2]);
 	}
