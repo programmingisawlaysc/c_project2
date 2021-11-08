@@ -69,6 +69,12 @@ int sedoku_table_easy_answer[10][10] = {
 extern int numx = 0; // 배열 위치 선정
 extern int numy = 0;
 
+extern int sedoku_quiz = 0; // 스도쿠 난이도 선택 0 ~ 14
+
+extern int sedoku_default = 0;
+extern int sedoku_answer = 1; // 스도쿠 초기값(0), 정답(1), 현재값(2)
+extern int sedoku_change = 2;
+
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
 	
@@ -83,7 +89,7 @@ int main() {
 	CursorView(); // <- 메뉴코드에서 커서 숨김처리 되서 이걸로 다시 커서 나타내요
 	*/
 	 // 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
-	
+
 	char key;
 	int x = 3, y = 2;
 	
@@ -138,7 +144,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 		for (j = 0; j < column; j++)
 		{
 			printf(" "); // 스도쿠 칸 오른쪽 공백
-			printf("%d", sedoku_table_easy[i][j]); // sedoku_table_easy 배열 숫자 출력
+			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table 배열 숫자 출력
 			printf(" "); // 스도쿠 칸 왼쪽 공백
 			printf("%c%c", a, b[2]);
 		}
@@ -158,7 +164,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	for (j = 0; j < column; j++)
 	{
 		printf(" "); // 스도쿠 칸 오른쪽 공백
-		printf("%d", sedoku_table_easy[8][j]); // sedoku_table_easy 배열 숫자 출력
+		printf("%d", sedoku_table[sedoku_quiz][sedoku_change][8][j]); // sedoku_table 배열 숫자 출력
 		printf(" "); // 스도쿠 칸 왼쪽 공백
 		printf("%c%c", a, b[2]);
 	}
@@ -223,32 +229,77 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 		}
 	case 49:
-		sedoku_table_easy[numy][numx] = 1;  //해당하는 배열의 수를 1로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 1;  //해당하는 배열의 수를 1로 변경
+			break;
+		}
+		else
+			break;
 	case 50:
-		sedoku_table_easy[numy][numx] = 2;  //해당하는 배열의 수를 2로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 2;  //해당하는 배열의 수를 2로 변경
+			break;
+		}
+		else
+			break;
 	case 51:
-		sedoku_table_easy[numy][numx] = 3;  //해당하는 배열의 수를 3으로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 3;  //해당하는 배열의 수를 3로 변경
+			break;
+		}
+		else
+			break;
 	case 52:
-		sedoku_table_easy[numy][numx] = 4;  //해당하는 배열의 수를 4로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 4;  //해당하는 배열의 수를 4로 변경
+			break;
+		}
+		else
+			break;
 	case 53:
-		sedoku_table_easy[numy][numx] = 5;  //해당하는 배열의 수를 5로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 5;  //해당하는 배열의 수를 5로 변경
+			break;
+		}
+		else
+			break;
 	case 54:
-		sedoku_table_easy[numy][numx] = 6;  //해당하는 배열의 수를 6으로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 6;  //해당하는 배열의 수를 6로 변경
+			break;
+		}
+		else
+			break;
 	case 55:
-		sedoku_table_easy[numy][numx] = 7;  //해당하는 배열의 수를 7로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 7;  //해당하는 배열의 수를 7로 변경
+			break;
+		}
+		else
+			break;
 	case 56:
-		sedoku_table_easy[numy][numx] = 8;  //해당하는 배열의 수를 8로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 8;  //해당하는 배열의 수를 8로 변경
+			break;
+		}
+		else
+			break;
 	case 57:
-		sedoku_table_easy[numy][numx] = 9;  //해당하는 배열의 수를 9로 변경
-		break;
+		if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 9;  //해당하는 배열의 수를 9로 변경
+			break;
+		}
+		else
+			break;
 	default:
 		return;
 	}
