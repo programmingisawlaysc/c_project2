@@ -72,6 +72,7 @@ extern int numx = 0; // 배열 위치 선정
 extern int numy = 0;
 
 int main() {
+	find_sedoku();
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
 
 	//게임 시작화면 - 시작화면 코딩할때는 주석풀고하세용.
@@ -88,22 +89,19 @@ int main() {
 	char key;
 	int x = 3, y = 2;
 
-	init();
-	titleDraw();
-	menuDraw();
-	int menuCode = menuDraw();
-	printf("선택한 메뉴: %d\n", menuCode);
 
 	while (1) {
 		titleDraw();
 		int menuCode = menuDraw();
-		if (menuCode == 0) { //게임시작
-			int n = maplistDraw();
 
+		if (menuCode == 0) { //게임시작
+
+			int n = maplistDraw();
+			system("cls");
 			if (n == 0) {
 				//쉬움
 				printf("쉬움 선택함\n");
-				find_sedoku();
+				
 				while (1) {
 
 					draw_plate(9, 9);
