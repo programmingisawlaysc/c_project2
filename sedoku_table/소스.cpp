@@ -83,16 +83,15 @@ int main() {
 	CursorView(); // <- 메뉴코드에서 커서 숨김처리 되서 이걸로 다시 커서 나타내요
 	*/
 	 // 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
-	int row, column;
+	
 	char key;
 	int x = 3, y = 2;
-	row = 9;
-	column = 9;
+	
 	find_sedoku();
 	while (1) {
 
 
-		draw_plate(column, row);
+		draw_plate(9, 9);
 		gotoxy(49, 10);
 		printf("%d %d", x, y);
 		gotoxy(x, y);
