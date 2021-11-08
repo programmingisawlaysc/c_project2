@@ -11,8 +11,10 @@ using namespace std;
 /*함수 선언*/
 int keyControl();
 void init();
-void titleDraw(); //게임 제목 출력)
+void titleDraw(); //게임 제목 출력
 int menuDraw();
+int maplistDraw();
+void infoDraw();
 void textcolor();
 void CursorView();
 extern void draw_plate(int column, int row);
@@ -71,7 +73,7 @@ extern int numy = 0;
 
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
-	
+
 	//게임 시작화면 - 시작화면 코딩할때는 주석풀고하세용.
 	/*
 	init();
@@ -79,32 +81,62 @@ int main() {
 	int menuCode = menuDraw();
 	printf("선택한 메뉴: %d\n", menuCode);
 	system("cls");
-	
+
 	CursorView(); // <- 메뉴코드에서 커서 숨김처리 되서 이걸로 다시 커서 나타내요
 	*/
-	 // 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
-	
+	// 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
 	char key;
 	int x = 3, y = 2;
-	
-	find_sedoku();
+
+	init();
+	titleDraw();
+	menuDraw();
+	int menuCode = menuDraw();
+	printf("선택한 메뉴: %d\n", menuCode);
+
 	while (1) {
+		titleDraw();
+		int menuCode = menuDraw();
+		if (menuCode == 0) { //게임시작
+			int n = maplistDraw();
 
+			if (n == 0) {
+				//쉬움
+				printf("쉬움 선택함\n");
+				find_sedoku();
+				while (1) {
 
-		draw_plate(9, 9);
-		gotoxy(49, 10);
-		printf("%d %d", x, y);
-		gotoxy(x, y);
-		key = _getch();
-		move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
-		Sleep(10);
+					draw_plate(9, 9);
+					gotoxy(49, 10);
+					printf("%d %d", x, y);
+					gotoxy(x, y);
+					key = _getch();
+					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
+					Sleep(10);
+					system("cls");
+
+				}
+				Sleep(1000);
+			}
+			else if (n == 1) {
+				//중간 아직 없음?
+				printf("중간 선택함\n");
+				Sleep(1000);
+			}
+			else if (n == 2) {
+				//어려움 아직 없음?
+				printf("어려움 선택함\n");
+				Sleep(1000);
+			}
+		}
+		else if (menuCode == 1) {
+			infoDraw(); //게임정보
+		}
+		else if (menuCode == 2) {
+			return 0; //종료
+		}
 		system("cls");
-
 	}
-	
-	
-
-
 	return 0;
 }
 
@@ -455,23 +487,18 @@ int menuDraw()
 	int x = 24;
 	int y = 12;
 	gotoxy(x - 2, y); // -2 한 이유는 > 를 출력해야하기 때문에
-	printf("> 상");
+	printf("> 게임시작");
 	gotoxy(x, y + 1);
-	printf("중");
+	printf("게임정보");
 	gotoxy(x, y + 2);
-	printf("하");
-	gotoxy(x, y + 3);
 	printf("종료");
 
 	while (1)
 	{ // 무한반복
 		int n = keyControl();
-		switch (n)
-		{
-		case UP:
-		{ //입력한 키와 값이 UP인 경우 (w)
-			if (y > 12)
-			{
+		switch (n) {
+		case UP: { //입력한 키와 값이 UP인 경우 (w)
+			if (y > 12) {
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, --y);
@@ -480,10 +507,8 @@ int menuDraw()
 			break;
 		}
 
-		case DOWN:
-		{
-			if (y < 15)
-			{
+		case DOWN: {
+			if (y < 14) {
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, ++y);
@@ -492,10 +517,64 @@ int menuDraw()
 			break;
 		}
 
-		case SUBMIT:
-		{
-			return y - 12;
+		case SUBMIT: {
+			return y - 12;}
 		}
+	}
+}
+
+int maplistDraw() {
+	int x = 24;
+	int y = 6;
+	system("cls");
+	printf("\n\n");
+	printf("                     [ 맵 선택 ]\n\n");
+
+	gotoxy(x - 2, y);
+	printf("> 쉬움");
+	gotoxy(x, y + 1);
+	printf("중간");
+	gotoxy(x, y + 2);
+	printf("어려움");
+	gotoxy(x, y + 3);
+	printf("뒤로");
+
+	while (1) {
+		int n = keyControl();
+		switch (n) {
+		case UP: {
+			if (y > 6) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, --y);
+				printf(">");
+			}
+			break;
+		}
+		case DOWN: {
+			if (y < 9) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, ++y);
+				printf(">");
+			}
+			break;
+		}
+
+		case SUBMIT: {
+			return y - 6;
+		}
+		}
+	}
+}
+
+void infoDraw() {
+	system("cls"); //화면 모두 지우기
+	printf("게임설명");
+
+	while (1) {
+		if (keyControl() == SUBMIT) {
+			break;
 		}
 	}
 }
