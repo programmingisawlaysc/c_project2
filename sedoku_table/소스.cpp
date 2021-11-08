@@ -8,6 +8,12 @@
 #include<utility>
 #include<string>
 using namespace std;
+/*함수 선언*/
+int keyControl();
+void init();
+void titleDraw(); //게임 제목 출력)
+int menuDraw();
+void textcolor();
 extern void draw_plate(int column, int row);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
 void gotoxy(int x, int y);
@@ -26,6 +32,11 @@ bool isture = false;
 
 #define X_MAX 35// 가로(열) 방향의 최대값
 #define Y_MAX 18// 세로(행) 방향의 최대값
+#define UP 0
+#define DOWN 1
+#define LEFT 2
+#define RIGHT 3
+#define SUBMIT 4 // 선택(스페이스바)
 
 
 // 해당 스도쿠 테이블값들은 데이터베이스와 알고리즘 없이도 쉽게 코딩을 할수 있도록 설정해놓은 값들입니다. 해당값들을 이용하여 스도쿠 게임을 제작하세요.
@@ -58,13 +69,22 @@ extern int numy = 0;
 
 int main() {
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
+	
+	//게임 시작화면 -  코딩할때는 주석풀고하세용.
+	init();
+	titleDraw();
+	int menuCode = menuDraw();
+	printf("선택한 메뉴: %d\n", menuCode);
+	
+
+	/* // 게임 진행하면 - 코딩할때는 별표 주석풀고하세요
 	int row, column;
 	char key;
 	int x = 3, y = 2;
 	row = 9;
 	column = 9;
 	find_sedoku();
-
+	
 	while (1) {
 
 		draw_plate(column, row);
@@ -77,6 +97,8 @@ int main() {
 		system("cls");
 
 	}
+	*/
+	
 
 
 	return 0;
@@ -361,5 +383,106 @@ void find_sedoku() {
 		vector<pair<int, int>>().swap(xy);//vector 초기화
 		istrue = false;
 
+	}
+}
+int keyControl()
+{
+	char temp = _getch();
+
+	if (temp == 'w' || temp == 'W')
+	{
+		return UP;
+	}
+	else if (temp == 'a' || temp == 'A')
+	{
+		return LEFT;
+	}
+	else if (temp == 's' || temp == 'S')
+	{
+		return DOWN;
+	}
+	else if (temp == 'd' || temp == 'D')
+	{
+		return RIGHT;
+	}
+	else if (temp == ' ')
+	{
+		return SUBMIT;
+	}
+}
+
+void init() // 콘솔 창 설정 함수 
+{
+	system("mode con cols=100 lines=20 | title 게 임 제 목"); // 창 넓이
+
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+	ConsoleCursor.bVisible = 0;
+	ConsoleCursor.dwSize = 1;
+	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
+}
+
+void textcolor(int color_number) // 문자 색상 변경 실수
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
+}
+
+void titleDraw()
+{
+	printf("\n\n\n\n");
+	printf("   ■■■     ■■■■   ■■■       ■■     ■   ■   ■    ■     \n");
+	printf("  ■          ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
+	printf("   ■■■     ■■■■   ■    ■   ■    ■   ■■      ■    ■     \n");
+	printf("         ■   ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
+	printf("   ■■■     ■■■■    ■■■      ■■     ■   ■     ■■       \n");
+}
+
+int menuDraw()
+{
+	int x = 24;
+	int y = 12;
+	gotoxy(x - 2, y); // -2 한 이유는 > 를 출력해야하기 때문에
+	printf("> 상");
+	gotoxy(x, y + 1);
+	printf("중");
+	gotoxy(x, y + 2);
+	printf("하");
+	gotoxy(x, y + 3);
+	printf("종료");
+
+	while (1)
+	{ // 무한반복
+		int n = keyControl();
+		switch (n)
+		{
+		case UP:
+		{ //입력한 키와 값이 UP인 경우 (w)
+			if (y > 12)
+			{
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, --y);
+				printf(">");
+			}
+			break;
+		}
+
+		case DOWN:
+		{
+			if (y < 15)
+			{
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, ++y);
+				printf(">");
+			}
+			break;
+		}
+
+		case SUBMIT:
+		{
+			return y - 12;
+		}
+		}
 	}
 }
