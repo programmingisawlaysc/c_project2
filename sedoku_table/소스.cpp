@@ -114,8 +114,11 @@ int main() {
 				while (1) {
 
 					draw_plate(9, 9);
+<<<<<<< Updated upstream
 					gotoxy(49, 10);
 					printf("%d %d", x, y);
+=======
+>>>>>>> Stashed changes
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
@@ -135,8 +138,6 @@ int main() {
 				while (1) { 
 
 					draw_plate(9, 9);
-					gotoxy(49, 10);
-					printf("%d %d", x, y);
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
@@ -156,14 +157,16 @@ int main() {
 				while (1) {
 
 					draw_plate(9, 9);
-					gotoxy(49, 10);
-					printf("%d %d", x, y);
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
 					Sleep(10);
 					system("cls");
+<<<<<<< Updated upstream
 
+=======
+					result = abc(sedoku_quiz);
+>>>>>>> Stashed changes
 				}
 				Sleep(1000);
 			}
