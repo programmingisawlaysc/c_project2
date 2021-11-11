@@ -105,8 +105,6 @@ int main() {
 				while (result != true) {
 
 					draw_plate(9, 9);
-					gotoxy(49, 20);
-					print_sedoku(sedoku_quiz);
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
@@ -132,8 +130,6 @@ int main() {
 				while (result != true) { 
 
 					draw_plate(9, 9);
-					gotoxy(49, 10);
-					printf("%d %d", x, y);
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
@@ -158,8 +154,6 @@ int main() {
 				while (result != true) {
 
 					draw_plate(9, 9);
-					gotoxy(49, 10);
-					printf("%d %d", x, y);
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
