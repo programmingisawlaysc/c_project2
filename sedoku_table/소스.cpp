@@ -27,13 +27,25 @@ void check2(bool check[], int y, int count_num);
 void check3(bool check[], int x, int y, int count_num);
 void dfs(int cnt, int count_num);
 void find_sedoku();
-bool abc(int Sedoku_quiz)
-
-// 스도쿠 배열에 대해서 전역변수를 선언했습니다. 전역변수를 최대한 사용하지않게 추후에 고치겠습니다.
 int sedoku_table[16][3][9][9];
 vector<pair<int, int>> xy;
 vector<string>  sedoku_set[16];
 bool isture = false;
+bool abc(int Sedoku_quiz)
+{
+	int x;
+	int y;
+	for (x = 0; x < 9; x++) {
+		for (y = 0; y < 9; y++)
+			if (sedoku_table[Sedoku_quiz][2][x][y] != sedoku_table[Sedoku_quiz][1][x][y]) {
+				return false;
+			}
+	}
+	return true;
+}
+
+// 스도쿠 배열에 대해서 전역변수를 선언했습니다. 전역변수를 최대한 사용하지않게 추후에 고치겠습니다.
+
 
 #define X_MAX 35// 가로(열) 방향의 최대값
 #define Y_MAX 18// 세로(행) 방향의 최대값
@@ -44,30 +56,8 @@ bool isture = false;
 #define SUBMIT 4 // 선택(스페이스바)
 
 
-// 해당 스도쿠 테이블값들은 데이터베이스와 알고리즘 없이도 쉽게 코딩을 할수 있도록 설정해놓은 값들입니다. 해당값들을 이용하여 스도쿠 게임을 제작하세요.
 
-int sedoku_table_easy[10][10] = {
-	{0, 3, 5, 4 ,6 ,9 ,2 ,7, 8},
-	{7, 8 ,2 ,1 ,0 ,5 ,6 ,0, 9},
-	{0, 6, 0, 2, 7, 8, 1, 3, 5},
-	{3, 2 ,1 ,0 ,4 ,6 ,8 ,9 ,7},
-	{8, 0, 4, 9, 1, 3, 5, 0, 6},
-	{5, 9, 6, 8, 2, 0, 4, 1, 3},
-	{9 ,1 ,7 ,6, 5, 2, 0, 8, 0},
-	{6 ,0 ,3 ,7 ,0, 1, 9, 5, 2},
-	{2, 5, 8, 3, 9, 4, 7, 6, 0}
-};
-int sedoku_table_easy_answer[10][10] = {
-	{1, 3, 5, 4 ,6 ,9 ,2 ,7, 8},
-	{7, 8 ,2 ,1 ,3 ,5 ,6 ,4, 9},
-	{4, 6, 9, 2, 7, 8, 1, 3, 5},
-	{3, 2 ,1 ,5 ,4 ,6 ,8 ,9 ,7},
-	{8, 7, 4, 9, 1, 3, 5, 2, 6},
-	{5, 9, 6, 8, 2, 7, 4, 1, 3},
-	{9 ,1 ,7 ,6, 5, 2, 3, 8, 4},
-	{6 ,4 ,3 ,7 ,8, 1, 9, 5, 2},
-	{2, 5, 8, 3, 9, 4, 7, 6, 1}
-};
+
 
 extern int numx = 0; // 배열 위치 선정
 extern int numy = 0;
@@ -79,7 +69,7 @@ extern int sedoku_answer = 1; // 스도쿠 초기값(0), 정답(1), 현재값(2)
 extern int sedoku_change = 2;
 
 int main() {
-	bool.result = false
+	bool result = false;
 	find_sedoku();
 	srand(time(NULL));
 	//github desktop을 이용해서 push와 pull을 해봤으니 hello문을 지웠습니다.
@@ -115,15 +105,20 @@ int main() {
 				while (result != true) {
 
 					draw_plate(9, 9);
-					gotoxy(49, 10);
-					printf("%d %d", x, y);
+					gotoxy(49, 20);
+					print_sedoku(sedoku_quiz);
 					gotoxy(x, y);
 					key = _getch();
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
 					Sleep(10);
 					system("cls");
-					result = abc(Sedoku_quiz);
+					result = abc(sedoku_quiz);
+					
 				}
+				printf("스도쿠를 성공하셨습니다\n");
+				printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
+				getchar();
+				system("cls");
 				result = false;
 				Sleep(1000);
 			}
@@ -144,8 +139,12 @@ int main() {
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
 					Sleep(10);
 					system("cls");
-					result = abc(Sedoku_quiz);
+					result = abc(sedoku_quiz);
 				}
+				printf("스도쿠를 성공하셨습니다\n");
+				printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
+				getchar();
+				system("cls");
 				result = false;
 				Sleep(1000);
 			}
@@ -166,9 +165,13 @@ int main() {
 					move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
 					Sleep(10);
 					system("cls");
-					result = abc(Sedoku_quiz);
+					result = abc(sedoku_quiz);
 
 				}
+				printf("스도쿠를 성공하셨습니다\n");
+				printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
+				getchar();
+				system("cls");
 				result = false;
 				Sleep(1000);
 			}
@@ -685,15 +688,3 @@ void infoDraw() {
 	}
 }
 
-bool abc(int Sedoku_quiz)
-{
-	    int x;
-		int y;
-		for (x = 0; x < 9; x++) {
-			for (y = 0; y < 9; y++)
-				if (sedoku_table[0][2][x][y] != sedoku_table[0][1][x][y]) {
-					return false;
-				}
-		}
-	return true;
-}
