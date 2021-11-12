@@ -51,8 +51,8 @@ conn.commit()
 #코드 끝 --
 
 dif = ['easy','medium','hard']
-for i in range(1):
-    for _ in range(1):
+for i in range(3):
+    for _ in range(5):
         url = f"https://sudoku.com/{dif[i]}/"
         chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  #크롬드라이버 버전 확인
 

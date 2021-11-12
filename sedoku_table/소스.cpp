@@ -30,6 +30,7 @@ void find_sedoku();
 int sedoku_table[16][3][9][9];
 vector<pair<int, int>> xy;
 vector<string>  sedoku_set[16];
+int q_estado;
 bool isture = false;
 bool abc(int Sedoku_quiz)
 {
