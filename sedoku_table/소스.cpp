@@ -69,6 +69,10 @@ extern int sedoku_default = 0;
 extern int sedoku_answer = 1; // 스도쿠 초기값(0), 정답(1), 현재값(2)
 extern int sedoku_change = 2;
 
+extern int hint_count_easy = 3; //쉬움 난이도 힌트 갯수
+extern int hint_count_medium = 2; // 중간 난이도 힌트 갯수
+extern int hint_count_hard = 1; // 어려움 난이도 힌트 갯수
+
 int main() {
 	bool result = false;
 	find_sedoku();
@@ -114,6 +118,7 @@ int main() {
 					result = abc(sedoku_quiz);
 					
 				}
+				hint_count_easy = 3;
 				printf("스도쿠를 성공하셨습니다\n");
 				printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 				getchar();
@@ -122,7 +127,7 @@ int main() {
 				Sleep(1000);
 			}
 			else if (n == 1) {
-				//쉬움
+				//중간
 				printf("중간 선택함\n");
 				sedoku_quiz = rand() % 5 + 5;
 
@@ -138,6 +143,7 @@ int main() {
 					system("cls");
 					result = abc(sedoku_quiz);
 				}
+				hint_count_medium = 2;
 				printf("스도쿠를 성공하셨습니다\n");
 				printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 				getchar();
@@ -146,7 +152,7 @@ int main() {
 				Sleep(1000);
 			}
 			else if (n == 2) {
-				//쉬움
+				//어려움
 				printf("어려움 선택함\n");
 				sedoku_quiz = rand() % 5 + 10;
 
@@ -163,6 +169,7 @@ int main() {
 					result = abc(sedoku_quiz);
 
 				}
+				hint_count_hard = 1;
 				printf("스도쿠를 성공하셨습니다\n");
 				printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 				getchar();
@@ -313,7 +320,15 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			numy = numy + 1; // 커서의 움직임에 따라 배열 위치 선택
 			break;
 		}
-	case 49:
+	case 48: //숫자키 0 입력
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
+		{
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 0;  //해당하는 배열의 수를 0로 변경
+			break;
+		}
+		else
+			break;
+	case 49: //숫자키 1 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 1;  //해당하는 배열의 수를 1로 변경
@@ -321,7 +336,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 50:
+	case 50: //숫자키 2 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 2;  //해당하는 배열의 수를 2로 변경
@@ -329,7 +344,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 51:
+	case 51: //숫자키 3 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 3;  //해당하는 배열의 수를 3로 변경
@@ -337,7 +352,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 52:
+	case 52: //숫자키 4 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 4;  //해당하는 배열의 수를 4로 변경
@@ -345,7 +360,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 53:
+	case 53: //숫자키 5 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 5;  //해당하는 배열의 수를 5로 변경
@@ -353,7 +368,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 54:
+	case 54: //숫자키 6 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 6;  //해당하는 배열의 수를 6로 변경
@@ -361,7 +376,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 55:
+	case 55: //숫자키 7 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 7;  //해당하는 배열의 수를 7로 변경
@@ -369,7 +384,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 56:
+	case 56: //숫자키 8 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 8;  //해당하는 배열의 수를 8로 변경
@@ -377,11 +392,53 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		else
 			break;
-	case 57:
+	case 57: //숫자키 9 입력
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 9;  //해당하는 배열의 수를 9로 변경
 			break;
+		}
+		else
+			break;
+	case 99: //영어 c 버튼 입력
+		if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) //난이도 쉬움일 경우
+		{
+			if (hint_count_easy == 0)
+				break;
+			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //배열의 수가 정답이 아닐 경우
+			{
+				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //해당하는 배열의 수를 정답으로 변경
+				hint_count_easy = hint_count_easy - 1; //힌트 갯수 차감
+				break;
+			}
+			else
+				break;
+		}
+		if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) //난이도 중간일 경우
+		{
+			if (hint_count_medium == 0)
+				break;
+			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //배열의 수가 정답이 아닐 경우
+			{
+				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //해당하는 배열의 수를 정답으로 변경
+				hint_count_medium = hint_count_medium - 1; //힌트 갯수 차감
+					break;
+			}
+			else
+				break;
+		}
+		if (sedoku_quiz == 10 || sedoku_quiz == 11 || sedoku_quiz == 12 || sedoku_quiz == 13 || sedoku_quiz == 14) //난이도 어려움일 경우
+		{
+			if (hint_count_hard == 0)
+				break;
+			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //배열의 수가 정답이 아닐 경우
+			{
+				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //해당하는 배열의 수를 정답으로 변경
+				hint_count_hard = hint_count_hard - 1; //힌트 갯수 차감
+					break;
+			}
+			else
+				break;
 		}
 		else
 			break;
