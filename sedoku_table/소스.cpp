@@ -270,6 +270,43 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	printf("%c%c%c%c%c%c", a, b[1], a, b[1], a, b[1]);
 	printf("%c%c", a, b[5]);
 	printf("\n");
+	{
+		{
+			int x = 40;
+			int y = 2;
+			printf("\n");
+			gotoxy(x - 2, y);
+			printf("              조작법              \n");
+			printf("\n\n");
+			gotoxy(x, y + 2);
+			printf("숫자 변경 : 숫자 패드 1~9 선택\n");
+			gotoxy(x, y + 3);
+			printf("칸 이동 : 화살표 키\n");
+			gotoxy(x, y + 4);
+			printf("힌트 : c\n");
+
+			if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) {
+				gotoxy(x, y + 6);
+				printf("난이도 : 쉬움");
+				gotoxy(x, y + 7);
+				printf("남은 힌트 횟수 : %d",hint_count_easy);
+			}
+
+			else if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) {
+				gotoxy(x, y + 6);
+				printf("난이도 : 중간");
+				gotoxy(x, y + 7);
+				printf("남은 힌트 횟수 : %d",hint_count_medium);
+			}
+
+			else {
+				gotoxy(x, y + 6);
+				printf("난이도 : 어려움");
+				gotoxy(x, y + 7);
+				printf("남은 힌트 횟수 : %d",hint_count_hard);
+			}
+		}
+	}
 }
 
 void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
@@ -554,7 +591,6 @@ void find_sedoku() {
 	sedoku_set[13].push_back("308900010029005700061000020030400157045010000006003200000500000200000030600007009");
 	sedoku_set[14].push_back("000201000002005009050080006000000000300050090080070004040090070020000010008710030");
 
-
 	for (int i = 0; i < 15; i++) {
 		for (int j = 0; j < 1; j++) {
 			for (int p = 0; p < 9; p++) {
@@ -567,6 +603,7 @@ void find_sedoku() {
 			}
 		}
 	}
+
 	// 끝
 
 	//각요소들에 대해 백트래킹으로 돌리고 그값을 받아온는 부분
@@ -739,4 +776,3 @@ void infoDraw() {
 		}
 	}
 }
-
