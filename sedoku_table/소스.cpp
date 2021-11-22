@@ -22,13 +22,13 @@ extern void draw_plate(int column, int row);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
 void gotoxy(int x, int y);
 void print_sedoku(int count_num);
-void check1(bool check[], int x, int count_num);
-void check2(bool check[], int y, int count_num);
-void check3(bool check[], int x, int y, int count_num);
+void check1(bool check[], int x, int count_num,int cnt);
+void check2(bool check[], int y, int count_num,int cnt);
+void check3(bool check[], int x, int y, int count_num,int cnt);
 void dfs(int cnt, int count_num);
 void find_sedoku();
 void cheat(int num);
-
+void ablenum(int x, int y);
 
 int sedoku_table[16][3][9][9];
 vector<pair<int, int>> xy;
@@ -326,6 +326,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				printf("난이도 : 쉬움");
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d",hint_count_easy);
+				ablenum(x, y);
 			}
 
 			else if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) {
@@ -333,6 +334,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				printf("난이도 : 중간");
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d",hint_count_medium);
+				ablenum(x, y);
 			}
 
 			else {
@@ -340,6 +342,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				printf("난이도 : 어려움");
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d",hint_count_hard);
+				ablenum(x, y);
 			}
 		}
 	}
@@ -474,7 +477,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	
-	case 67: //영어 c 버튼 입력
+	case 99: //영어 c 버튼 입력
 		if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) //난이도 쉬움일 경우
 		{
 			if (hint_count_easy == 0)
@@ -546,33 +549,33 @@ void print_sedoku(int count_num) {
 		cout << "\n";
 	}
 }
-void check1(bool check[], int x, int count_num) {
+void check1(bool check[], int x, int count_num,int cnt) {
 	for (int i = 0; i < 9; i++) {
-		if (sedoku_table[count_num][1][x][i] != 0) {
-			int where = sedoku_table[count_num][1][x][i] - 1;
+		if (sedoku_table[count_num][cnt][x][i] != 0) {
+			int where = sedoku_table[count_num][cnt][x][i] - 1;
 			check[where] = true;
 		}
 	}
 
 }
 
-void check2(bool check[], int y, int count_num) {
+void check2(bool check[], int y, int count_num,int cnt) {
 	for (int i = 0; i < 9; i++) {
-		if (sedoku_table[count_num][1][i][y] != 0) {
-			int where = sedoku_table[count_num][1][i][y] - 1;
+		if (sedoku_table[count_num][cnt][i][y] != 0) {
+			int where = sedoku_table[count_num][cnt][i][y] - 1;
 			if (check[where] == false) {
 				check[where] = true;
 			}
 		}
 	}
 }
-void check3(bool check[], int x, int y, int count_num) {
+void check3(bool check[], int x, int y, int count_num,int cnt) {
 	int xx = x / 3;
 	int yy = y / 3;
 	for (int i = 3 * xx; i < 3 * xx + 3; i++) {
 		for (int j = 3 * yy; j < yy * 3 + 3; j++) {
-			if (sedoku_table[count_num][1][i][j] != 0) {
-				int where = sedoku_table[count_num][1][i][j] - 1;
+			if (sedoku_table[count_num][cnt][i][j] != 0) {
+				int where = sedoku_table[count_num][cnt][i][j] - 1;
 				if (check[where] == false) {
 					check[where] = true;
 				}
@@ -580,6 +583,26 @@ void check3(bool check[], int x, int y, int count_num) {
 			}
 		}
 	}
+
+}
+
+void ablenum(int x , int y) {
+	bool canable[9] = { false, false, false, false, false, false, false, false, false };
+	check1(canable, numx, sedoku_quiz,2);
+	check2(canable, numy, sedoku_quiz,2);
+	check3(canable, numx, numy, sedoku_quiz,2);
+	gotoxy( x , y + 8);
+	if (sedoku_table[sedoku_quiz][0][numy][numx] == 0) {
+		cout << "사용가능한 숫자: ";
+		for (int i = 0; i < 9; i++) {
+
+			if (canable[i] == false) {
+				cout << i + 1 << ' ';
+			}
+
+		}
+	}
+
 
 }
 bool istrue = false;
@@ -596,12 +619,12 @@ void dfs(int cnt, int count_num) {
 
 	int x = xy[cnt].first;
 	int y = xy[cnt].second;
-	bool can[9] = { false,false,false,false,false,false,false,false };
-	check1(can, x, count_num);
+	bool can[9] = { false,false,false,false,false,false,false,false,false };
+	check1(can, x, count_num,1);
 
-	check2(can, y, count_num);
+	check2(can, y, count_num,1);
 
-	check3(can, x, y, count_num);
+	check3(can, x, y, count_num,1);
 
 
 	//xy좌표로 가능한 리스트 불러온다
