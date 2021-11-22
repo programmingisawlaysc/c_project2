@@ -111,7 +111,7 @@ int main() {
 				//쉬움
 				sedoku_quiz = rand() % 5;
 				if (count(sedoku_quiz) == false) {
-					printf("쉬움 선택함\n");
+					
 					while (finished[sedoku_quiz] == true) {
 						sedoku_quiz = rand() % 5;
 					}
@@ -146,7 +146,7 @@ int main() {
 				//중간
 				sedoku_quiz = rand() % 5 + 5;
 				if (count(sedoku_quiz) == false) {
-					printf("쉬움 선택함\n");
+					
 					while (finished[sedoku_quiz] == true) {
 						sedoku_quiz = rand() % 5 + 5;
 					}
@@ -182,7 +182,7 @@ int main() {
 				//어려움
 				sedoku_quiz = rand() % 5 + 10;
 				if (count(sedoku_quiz) == false) {
-					printf("쉬움 선택함\n");
+					
 					while (finished[sedoku_quiz] == true) {
 						sedoku_quiz = rand() % 5 + 10;
 					}
