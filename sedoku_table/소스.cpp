@@ -588,9 +588,9 @@ void check3(bool check[], int x, int y, int count_num,int cnt) {
 
 void ablenum(int x , int y) {
 	bool canable[9] = { false, false, false, false, false, false, false, false, false };
-	check1(canable, numx, sedoku_quiz,2);
-	check2(canable, numy, sedoku_quiz,2);
-	check3(canable, numx, numy, sedoku_quiz,2);
+	check1(canable, numy, sedoku_quiz,2);
+	check2(canable, numx, sedoku_quiz,2);
+	check3(canable, numy, numx, sedoku_quiz,2);
 	gotoxy( x , y + 8);
 	if (sedoku_table[sedoku_quiz][0][numy][numx] == 0) {
 		cout << "사용가능한 숫자: ";
