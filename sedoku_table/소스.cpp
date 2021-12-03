@@ -320,13 +320,15 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 			printf("칸 이동 : 화살표 키\n");
 			gotoxy(x, y + 4);
 			printf("힌트 : c\n");
-
+    
 			if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) {
 				gotoxy(x, y + 6);
 				printf("난이도 : 쉬움");
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d",hint_count_easy);
 				ablenum(x, y);
+				gotoxy(x, y + 11);
+				printf("메인 메뉴 : m");
 			}
 
 			else if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) {
@@ -335,6 +337,8 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d",hint_count_medium);
 				ablenum(x, y);
+				gotoxy(x, y + 11);
+				printf("메인 메뉴 : m");
 			}
 
 			else {
@@ -343,6 +347,8 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d",hint_count_hard);
 				ablenum(x, y);
+				gotoxy(x, y + 11);
+				printf("메인 메뉴 : m");
 			}
 		}
 	}
@@ -528,9 +534,23 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else {
 			break;
 		}
+	case 109:  // m 입력 -> 메인화면
+		if(true)
+		{
+			cheat(sedoku_quiz);
+			break;
+
+		}
+		else
+		{
+			break;
+		}
+
+
 	default:
 		return;
 	}
+
 }
 
 
@@ -852,5 +872,5 @@ void cheat(int num) {
 			sedoku_table[num][2][i][j] = sedoku_table[num][1][i][j];
 		}
 	}
-	
+
 }
