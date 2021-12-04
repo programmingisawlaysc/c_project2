@@ -142,12 +142,12 @@ int main() {
 					result = false;
 					Sleep(1000);
 					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
 					printf("경과시간: %0.3lf\n", timeresult);
 				}
 				else {
 					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
 					printf("경과시간: %0.3lf\n", timeresult);
 					printf("더이상 풀문제가 없습니다.");
 					getchar();
@@ -176,7 +176,7 @@ int main() {
 					}
 					hint_count_medium = 2;
 					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
 					printf("경과시간: %0.3lf\n", timeresult);
 					printf("스도쿠를 성공하셨습니다\n");
 					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
@@ -187,7 +187,7 @@ int main() {
 				}
 				else {
 					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
 					printf("경과시간: %0.3lf\n", timeresult);
 					printf("더이상 풀문제가 없습니다.");
 					getchar();
@@ -219,7 +219,7 @@ int main() {
 					}
 					hint_count_hard = 1;
 					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
 					printf("경과시간: %0.3lf\n", timeresult);
 					printf("스도쿠를 성공하셨습니다\n");
 					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
@@ -231,7 +231,7 @@ int main() {
 
 				else {
 					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
 					printf("경과시간: %0.3lf\n", timeresult);
 					printf("더이상 풀문제가 없습니다.");
 					getchar();
