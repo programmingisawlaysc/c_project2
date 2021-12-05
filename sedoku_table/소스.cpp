@@ -33,6 +33,35 @@ clock_t timestart, timeend;
 double timeresult;
 double gametime;
 
+enum {
+	BLAK,
+	DARK_BLUE,
+	DARK_GREEN,
+	DARK_SKY_BLUE,
+	DARK_RED,
+	DARK_VIOLET,
+	DARK_YELLOW,
+	GRAY,
+	DARK_GRAY,
+	BLUE,
+	GREEN,
+	SKY_BLUE,
+	RED,
+	VIOLET,
+	YELLOW,
+	WHITE,
+};
+
+int Out_Color = BLUE;
+int In_Color = DARK_GRAY;
+int G_Color = GREEN;
+int W_Color = WHITE;
+
+void SetColor(int color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
 int sedoku_table[16][3][9][9];
 vector<pair<int, int>> xy;
 vector<string>  sedoku_set[16];
@@ -255,6 +284,8 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
+
+	SetColor(W_Color);
 	for (i = 1; i < 12; i++) // 스도쿠 테두리 모양 저장 ex) {"┏", "━", "┯", "┓"},
 	{
 		b[i] = 0xa0 + i;
@@ -334,6 +365,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	printf("\n");
 	{
 		{
+			SetColor(G_Color);
 			int x = 40;
 			int y = 2;
 			printf("\n");
@@ -789,6 +821,7 @@ void textcolor(int color_number) // 문자 색상 변경 실수
 
 void titleDraw()
 {
+	SetColor(W_Color);
 	printf("\n\n\n\n");
 	printf("   ■■■     ■■■■   ■■■       ■■     ■   ■   ■    ■     \n");
 	printf("  ■          ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
