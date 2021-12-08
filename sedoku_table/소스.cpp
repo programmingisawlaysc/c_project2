@@ -32,7 +32,6 @@ void ablenum(int x, int y);
 clock_t timestart, timeend;
 double timeresult;
 double gametime;
-
 enum {
 	BLAK,
 	DARK_BLUE,
