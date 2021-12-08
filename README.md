@@ -41,7 +41,11 @@
       + 11월 3일 회의를 통해 중간고사 전에 정해놓은 스도쿠 프로젝트의 자세한 내용과 역할을 분담함. 또 github desktop을 이용해 push,pull,branch,pull request,merge의 정확한 내용을 이해하고 활용해봄. - 전부
       + 11월 5일 (1) 정해놓은 스도쿠 판을 활용하여 cmd창내에서 스도쿠판을 그릴수있는 함수인 draw_plate함수를 제작함. - 대현
       + 11월 5일 (2) 스도쿠판내에서 인덱싱을 통해 draw_plate 함수내에서 스도쿠내의 숫자를 출력하도록 함수를 수정함. -대현
-      + 11월 5일 (3) 스도쿠판을 그린후 스도쿠판내에서 방향키를 이용하여 스도쿠판내에서 이동하여 x,y좌표를 얻을수 있는 move_arrow_key함수를 제작함.
+      + 11월 5일 (3) 스도쿠판을 그린후 스도쿠판내에서 방향키를 이용하여 스도쿠판내에서 이동하여 x,y좌표를 얻을수 있는 move_arrow_key함수를 제작함.- 경태
       + 11월 7일 move_arrow_key함수를 수정해서 스도쿠의 인덱싱을 통하여 스도쿠값을 수정할수 있도록 코딩함 - 현서,대현
-      + 11월 8일 다른 환경에서 제작한 시작화면의 함수 (init, keycontrol , titledraw, menudraw, textcolor) 를  sedoku_table프로젝트의 환경에 더함
+      + 11월 8일 (1)다른 환경에서 제작한 시작화면의 함수 (init, keycontrol , titledraw, menudraw, textcolor) 를  sedoku_table프로젝트의 환경에 더함- 경민
+      + 11월 8일 (2)기존에 있던 sedoku_table_easy배열에서 백트래킹으로 정답을 얻은 sedoku_table 배열을 새로 얻어서 원래 존재 했던 move_arrow_key,draw_plate함수를 수정함 - 대현,현서
+      + 11월 8일 (3)기존에 있던 draw _plate 함수에 바꿀수 있는 숫자를 노란색으로 출력되도록 수정함 - 경태
+      + 11월 10  while문내에서 무한으로 돌아가던 draw_plate함수를 끝내도록 bool abc함수를 제작하여 x,y좌표를 수정값과 결과값과 비교하여 전부 맞으면 true,하나라도 틀리면 false값을 리턴되도록 해주는 함수를 제작하여 기임합 - 신원
+      + 11월 11일 시작화면과 진행화면이 매끄럽게 진행될수있도록 코드를 추가함 - 재민
       + 
