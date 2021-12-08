@@ -9,10 +9,10 @@
 #include<string>
 #include <time.h>
 using namespace std;
-/*«‘ºˆ º±æ*/
+/*Ìï®Ïàò ÏÑ†Ïñ∏*/
 int keyControl();
 void init();
-void titleDraw(); //∞‘¿” ¡¶∏Ò √‚∑¬)
+void titleDraw(); //Í≤åÏûÑ Ï†úÎ™© Ï∂úÎ†•)
 int menuDraw();
 void textcolor(int color_number);
 int maplistDraw();
@@ -22,13 +22,48 @@ extern void draw_plate(int column, int row);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
 void gotoxy(int x, int y);
 void print_sedoku(int count_num);
-void check1(bool check[], int x, int count_num,int cnt);
-void check2(bool check[], int y, int count_num,int cnt);
-void check3(bool check[], int x, int y, int count_num,int cnt);
+
+void check1(bool check[], int x, int count_num, int cnt);
+void check2(bool check[], int y, int count_num, int cnt);
+void check3(bool check[], int x, int y, int count_num, int cnt);
+
 void dfs(int cnt, int count_num);
 void find_sedoku();
 void cheat(int num);
 void ablenum(int x, int y);
+
+clock_t timestart, timeend;
+double timeresult;
+double gametime;
+enum {
+	BLAK,
+	DARK_BLUE,
+	DARK_GREEN,
+	DARK_SKY_BLUE,
+	DARK_RED,
+	DARK_VIOLET,
+	DARK_YELLOW,
+	GRAY,
+	DARK_GRAY,
+	BLUE,
+	GREEN,
+	SKY_BLUE,
+	RED,
+	VIOLET,
+	YELLOW,
+	WHITE,
+};
+
+int Out_Color = BLUE;
+int In_Color = DARK_GRAY;
+int G_Color = GREEN;
+int W_Color = WHITE;
+
+void SetColor(int color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
 
 int sedoku_table[16][3][9][9];
 vector<pair<int, int>> xy;
@@ -52,7 +87,9 @@ bool abc(int Sedoku_quiz)
 	return true;
 }
 
-bool count (int sedoku_quiz) {
+
+bool count(int sedoku_quiz) {
+
 
 	int range = sedoku_quiz / 5;
 	for (int i = 0; i < range + 5; i++) {
@@ -63,33 +100,33 @@ bool count (int sedoku_quiz) {
 	return true;
 }
 
-// Ω∫µµƒÌ πËø≠ø° ¥Î«ÿº≠ ¿¸ø™∫Øºˆ∏¶ º±æ«ﬂΩ¿¥œ¥Ÿ. ¿¸ø™∫Øºˆ∏¶ √÷¥Î«— ªÁøÎ«œ¡ˆæ ∞‘ √ﬂ»ƒø° ∞Ìƒ°∞⁄Ω¿¥œ¥Ÿ.
+// Ïä§ÎèÑÏø† Î∞∞Ïó¥Ïóê ÎåÄÌï¥ÏÑú Ï†ÑÏó≠Î≥ÄÏàòÎ•º ÏÑ†Ïñ∏ÌñàÏäµÎãàÎã§. Ï†ÑÏó≠Î≥ÄÏàòÎ•º ÏµúÎåÄÌïú ÏÇ¨Ïö©ÌïòÏßÄÏïäÍ≤å Ï∂îÌõÑÏóê Í≥†ÏπòÍ≤†ÏäµÎãàÎã§.
 
 
-#define X_MAX 35// ∞°∑Œ(ø≠) πÊ«‚¿« √÷¥Î∞™
-#define Y_MAX 18// ºº∑Œ(«‡) πÊ«‚¿« √÷¥Î∞™
+#define X_MAX 35// Í∞ÄÎ°ú(Ïó¥) Î∞©Ìñ•Ïùò ÏµúÎåÄÍ∞í
+#define Y_MAX 18// ÏÑ∏Î°ú(Ìñâ) Î∞©Ìñ•Ïùò ÏµúÎåÄÍ∞í
 #define UP 0
 #define DOWN 1
 #define LEFT 2
 #define RIGHT 3
-#define SUBMIT 4 // º±≈√(Ω∫∆‰¿ÃΩ∫πŸ)
+#define SUBMIT 4 // ÏÑ†ÌÉù(Ïä§ÌéòÏù¥Ïä§Î∞î)
 
 
 
 
 
-extern int numx = 0; // πËø≠ ¿ßƒ° º±¡§
+extern int numx = 0; // Î∞∞Ïó¥ ÏúÑÏπò ÏÑ†Ï†ï
 extern int numy = 0;
 
-extern int sedoku_quiz = 0; // Ω∫µµƒÌ ≥≠¿Ãµµ º±≈√ 0 ~ 14
+extern int sedoku_quiz = 0; // Ïä§ÎèÑÏø† ÎÇúÏù¥ÎèÑ ÏÑ†ÌÉù 0 ~ 14
 
 extern int sedoku_default = 0;
-extern int sedoku_answer = 1; // Ω∫µµƒÌ √ ±‚∞™(0), ¡§¥‰(1), «ˆ¿Á∞™(2)
+extern int sedoku_answer = 1; // Ïä§ÎèÑÏø† Ï¥àÍ∏∞Í∞í(0), Ï†ïÎãµ(1), ÌòÑÏû¨Í∞í(2)
 extern int sedoku_change = 2;
 
-extern int hint_count_easy = 3; //Ω¨øÚ ≥≠¿Ãµµ »˘∆Æ ∞πºˆ
-extern int hint_count_medium = 2; // ¡ﬂ∞£ ≥≠¿Ãµµ »˘∆Æ ∞πºˆ
-extern int hint_count_hard = 1; // æÓ∑¡øÚ ≥≠¿Ãµµ »˘∆Æ ∞πºˆ
+extern int hint_count_easy = 3; //Ïâ¨ÏõÄ ÎÇúÏù¥ÎèÑ ÌûåÌä∏ Í∞ØÏàò
+extern int hint_count_medium = 2; // Ï§ëÍ∞Ñ ÎÇúÏù¥ÎèÑ ÌûåÌä∏ Í∞ØÏàò
+extern int hint_count_hard = 1; // Ïñ¥Î†§ÏõÄ ÎÇúÏù¥ÎèÑ ÌûåÌä∏ Í∞ØÏàò
 
 int main() {
 	bool result = false;
@@ -103,15 +140,17 @@ int main() {
 		titleDraw();
 		int menuCode = menuDraw();
 
-		if (menuCode == 0) { //∞‘¿”Ω√¿€
+		if (menuCode == 0) { //Í≤åÏûÑÏãúÏûë
 
 			int n = maplistDraw();
 			system("cls");
 			if (n == 0) {
-				//Ω¨øÚ
+				//Ïâ¨ÏõÄ
 				sedoku_quiz = rand() % 5;
 				if (count(sedoku_quiz) == false) {
-					
+
+
+
 					while (finished[sedoku_quiz] == true) {
 						sedoku_quiz = rand() % 5;
 					}
@@ -127,26 +166,42 @@ int main() {
 						system("cls");
 						result = abc(sedoku_quiz);
 
+						timestart = clock();
+						gametime = (double)(timestart) / CLOCKS_PER_SEC;
 					}
 					hint_count_easy = 3;
-					printf("Ω∫µµƒÌ∏¶ º∫∞¯«œºÃΩ¿¥œ¥Ÿ\n");
-					printf("æ∆π´≈∞≥™ ¿‘∑¬«œø© ∏ﬁ¥∫»≠∏È¿∏∑Œ µπæ∆∞°Ω Ω√ø‰");
+					timeend = clock();
+					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
+
+					printf("Ïä§ÎèÑÏø†Î•º ÏÑ±Í≥µÌïòÏÖ®ÏäµÎãàÎã§\n");
+					printf("ÏïÑÎ¨¥ÌÇ§ÎÇò ÏûÖÎ†•ÌïòÏó¨ Î©îÎâ¥ÌôîÎ©¥ÏúºÎ°ú ÎèåÏïÑÍ∞ÄÏã≠ÏãúÏöî");
 					getchar();
 					system("cls");
 					result = false;
 					Sleep(1000);
+
+					timeend = clock();
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
 				}
 				else {
-					printf("¥ı¿ÃªÛ «ÆπÆ¡¶∞° æ¯Ω¿¥œ¥Ÿ.");
+					timeend = clock();
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
+
+					printf("ÎçîÏù¥ÏÉÅ ÌíÄÎ¨∏Ï†úÍ∞Ä ÏóÜÏäµÎãàÎã§.");
 					getchar();
 					system("cls");
 				}
 			}
 			else if (n == 1) {
-				//¡ﬂ∞£
+				//Ï§ëÍ∞Ñ
 				sedoku_quiz = rand() % 5 + 5;
 				if (count(sedoku_quiz) == false) {
-					
+
+
+
 					while (finished[sedoku_quiz] == true) {
 						sedoku_quiz = rand() % 5 + 5;
 					}
@@ -160,29 +215,45 @@ int main() {
 						Sleep(10);
 						system("cls");
 						result = abc(sedoku_quiz);
+
+						timestart = clock();
+						gametime = (double)(timestart) / CLOCKS_PER_SEC;
 					}
 					hint_count_medium = 2;
-					printf("Ω∫µµƒÌ∏¶ º∫∞¯«œºÃΩ¿¥œ¥Ÿ\n");
-					printf("æ∆π´≈∞≥™ ¿‘∑¬«œø© ∏ﬁ¥∫»≠∏È¿∏∑Œ µπæ∆∞°Ω Ω√ø‰");
+					timeend = clock();
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
+
+					printf("Ïä§ÎèÑÏø†Î•º ÏÑ±Í≥µÌïòÏÖ®ÏäµÎãàÎã§\n");
+					printf("ÏïÑÎ¨¥ÌÇ§ÎÇò ÏûÖÎ†•ÌïòÏó¨ Î©îÎâ¥ÌôîÎ©¥ÏúºÎ°ú ÎèåÏïÑÍ∞ÄÏã≠ÏãúÏöî");
 					getchar();
 					system("cls");
 					result = false;
 					Sleep(1000);
 				}
 				else {
-					printf("¥ı¿ÃªÛ «ÆπÆ¡¶∞° æ¯Ω¿¥œ¥Ÿ.");
+
+					timeend = clock();
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
+
+					printf("ÎçîÏù¥ÏÉÅ ÌíÄÎ¨∏Ï†úÍ∞Ä ÏóÜÏäµÎãàÎã§.");
 					getchar();
 					system("cls");
 				}
 
-				
+
+
+
 
 			}
 			else if (n == 2) {
-				//æÓ∑¡øÚ
+				//Ïñ¥Î†§ÏõÄ
 				sedoku_quiz = rand() % 5 + 10;
 				if (count(sedoku_quiz) == false) {
-					
+
+
+
 					while (finished[sedoku_quiz] == true) {
 						sedoku_quiz = rand() % 5 + 10;
 					}
@@ -196,18 +267,30 @@ int main() {
 						system("cls");
 						result = abc(sedoku_quiz);
 
+						timestart = clock();
+						gametime = (double)(timestart) / CLOCKS_PER_SEC;
+
 					}
 					hint_count_hard = 1;
-					printf("Ω∫µµƒÌ∏¶ º∫∞¯«œºÃΩ¿¥œ¥Ÿ\n");
-					printf("æ∆π´≈∞≥™ ¿‘∑¬«œø© ∏ﬁ¥∫»≠∏È¿∏∑Œ µπæ∆∞°Ω Ω√ø‰");
+					timeend = clock();
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
+
+					printf("Ïä§ÎèÑÏø†Î•º ÏÑ±Í≥µÌïòÏÖ®ÏäµÎãàÎã§\n");
+					printf("ÏïÑÎ¨¥ÌÇ§ÎÇò ÏûÖÎ†•ÌïòÏó¨ Î©îÎâ¥ÌôîÎ©¥ÏúºÎ°ú ÎèåÏïÑÍ∞ÄÏã≠ÏãúÏöî");
 					getchar();
 					system("cls");
 					result = false;
 					Sleep(1000);
 				}
-				
+
+
 				else {
-					printf("¥ı¿ÃªÛ «ÆπÆ¡¶∞° æ¯Ω¿¥œ¥Ÿ.");
+					timeend = clock();
+					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+					printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", timeresult);
+
+					printf("ÎçîÏù¥ÏÉÅ ÌíÄÎ¨∏Ï†úÍ∞Ä ÏóÜÏäµÎãàÎã§.");
 					getchar();
 					system("cls");
 
@@ -215,21 +298,23 @@ int main() {
 			}
 		}
 		else if (menuCode == 1) {
-			infoDraw(); //∞‘¿”¡§∫∏
+			infoDraw(); //Í≤åÏûÑÏ†ïÎ≥¥
 		}
 		else if (menuCode == 2) {
-			return 0; //¡æ∑·
+			return 0; //Ï¢ÖÎ£å
 		}
 		system("cls");
 	}
 	return 0;
 }
-void draw_plate(int column, int row) // Ω∫µµƒÌ ∆« √‚∑¬ «‘ºˆ
+void draw_plate(int column, int row) // Ïä§ÎèÑÏø† Ìåê Ï∂úÎ†• Ìï®Ïàò
 {
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
-	for (i = 1; i < 12; i++) // Ω∫µµƒÌ ≈◊µŒ∏Æ ∏æÁ ¿˙¿Â ex) {"¶Æ", "¶¨", "¶∏", "¶Ø"},
+
+	SetColor(W_Color);
+	for (i = 1; i < 12; i++) // Ïä§ÎèÑÏø† ÌÖåÎëêÎ¶¨ Î™®Ïñë Ï†ÄÏû• ex) {"‚îè", "‚îÅ", "‚îØ", "‚îì"},
 	{
 		b[i] = 0xa0 + i;
 	}
@@ -254,17 +339,17 @@ void draw_plate(int column, int row) // Ω∫µµƒÌ ∆« √‚∑¬ «‘ºˆ
 		for (j = 0; j < column; j++)
 		{
 			textcolor(15);
-			printf(" "); // Ω∫µµƒÌ ƒ≠ ø¿∏•¬  ∞¯πÈ
-			if (sedoku_table[sedoku_quiz][sedoku_default][i][j] == 0) { //ø¯∑°¿« ∞™¿Ã 0¿Ã∏È ªˆ±Ú¿ª ≥Î∂ıªˆ¿∏∑Œ
-				textcolor(14); //14: ≥Î∂ıªˆ
-				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table πËø≠ º˝¿⁄ √‚∑¬
+			printf(" "); // Ïä§ÎèÑÏø† Ïπ∏ Ïò§Î•∏Ï™Ω Í≥µÎ∞±
+			if (sedoku_table[sedoku_quiz][sedoku_default][i][j] == 0) { //ÏõêÎûòÏùò Í∞íÏù¥ 0Ïù¥Î©¥ ÏÉâÍπîÏùÑ ÎÖ∏ÎûÄÏÉâÏúºÎ°ú
+				textcolor(14); //14: ÎÖ∏ÎûÄÏÉâ
+				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table Î∞∞Ïó¥ Ïà´Ïûê Ï∂úÎ†•
 			}
 			else {
-				textcolor(15); //15: »Úªˆ
-				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table πËø≠ º˝¿⁄ √‚∑¬
+				textcolor(15); //15: Ìù∞ÏÉâ
+				printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table Î∞∞Ïó¥ Ïà´Ïûê Ï∂úÎ†•
 			}
 			textcolor(15);
-			printf(" "); // Ω∫µµƒÌ ƒ≠ øﬁ¬  ∞¯πÈ
+			printf(" "); // Ïä§ÎèÑÏø† Ïπ∏ ÏôºÏ™Ω Í≥µÎ∞±
 			printf("%c%c", a, b[2]);
 		}
 		printf("\n");
@@ -283,17 +368,17 @@ void draw_plate(int column, int row) // Ω∫µµƒÌ ∆« √‚∑¬ «‘ºˆ
 	for (j = 0; j < column; j++)
 	{
 		textcolor(15);
-		printf(" "); // Ω∫µµƒÌ ƒ≠ ø¿∏•¬  ∞¯πÈ
-		if (sedoku_table[sedoku_quiz][sedoku_default][i][j] == 0) { //ø¯∑°¿« ∞™¿Ã 0¿Ã∏È ªˆ±Ú¿ª ≥Î∂ıªˆ¿∏∑Œ
-			textcolor(14); //14: ≥Î∂ıªˆ
-			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table πËø≠ º˝¿⁄ √‚∑¬
+		printf(" "); // Ïä§ÎèÑÏø† Ïπ∏ Ïò§Î•∏Ï™Ω Í≥µÎ∞±
+		if (sedoku_table[sedoku_quiz][sedoku_default][i][j] == 0) { //ÏõêÎûòÏùò Í∞íÏù¥ 0Ïù¥Î©¥ ÏÉâÍπîÏùÑ ÎÖ∏ÎûÄÏÉâÏúºÎ°ú
+			textcolor(14); //14: ÎÖ∏ÎûÄÏÉâ
+			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table Î∞∞Ïó¥ Ïà´Ïûê Ï∂úÎ†•
 		}
 		else {
-			textcolor(15); //15: »Úªˆ
-			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table πËø≠ º˝¿⁄ √‚∑¬
+			textcolor(15); //15: Ìù∞ÏÉâ
+			printf("%d", sedoku_table[sedoku_quiz][sedoku_change][i][j]); // sedoku_table Î∞∞Ïó¥ Ïà´Ïûê Ï∂úÎ†•
 		}
 		textcolor(15);
-		printf(" "); // Ω∫µµƒÌ ƒ≠ øﬁ¬  ∞¯πÈ
+		printf(" "); // Ïä§ÎèÑÏø† Ïπ∏ ÏôºÏ™Ω Í≥µÎ∞±
 		printf("%c%c", a, b[2]);
 	}
 	printf("\n");
@@ -308,47 +393,60 @@ void draw_plate(int column, int row) // Ω∫µµƒÌ ∆« √‚∑¬ «‘ºˆ
 	printf("\n");
 	{
 		{
+
+			SetColor(G_Color);
+
 			int x = 40;
 			int y = 2;
 			printf("\n");
 			gotoxy(x - 2, y);
-			printf("              ¡∂¿€π˝              \n");
+			printf("              Ï°∞ÏûëÎ≤ï              \n");
 			printf("\n\n");
 			gotoxy(x, y + 2);
-			printf("º˝¿⁄ ∫Ø∞Ê : º˝¿⁄ ∆–µÂ 1~9 º±≈√\n");
+			printf("Ïà´Ïûê Î≥ÄÍ≤Ω : Ïà´Ïûê Ìå®Îìú 1~9 ÏÑ†ÌÉù\n");
 			gotoxy(x, y + 3);
-			printf("ƒ≠ ¿Ãµø : »≠ªÏ«• ≈∞\n");
+			printf("Ïπ∏ Ïù¥Îèô : ÌôîÏÇ¥Ìëú ÌÇ§\n");
 			gotoxy(x, y + 4);
-			printf("»˘∆Æ : c\n");
-    
+			printf("ÌûåÌä∏ : c\n");
+
+			gotoxy(x, y + 15);
+			printf("Í≤ΩÍ≥ºÏãúÍ∞Ñ: %0.3lf\n", gametime);
+
+
 			if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) {
 				gotoxy(x, y + 6);
-				printf("≥≠¿Ãµµ : Ω¨øÚ");
+				printf("ÎÇúÏù¥ÎèÑ : Ïâ¨ÏõÄ");
 				gotoxy(x, y + 7);
-				printf("≥≤¿∫ »˘∆Æ »Ωºˆ : %d",hint_count_easy);
+
+				printf("ÎÇ®ÏùÄ ÌûåÌä∏ ÌöüÏàò : %d", hint_count_easy);
+
 				ablenum(x, y);
 				gotoxy(x, y + 11);
-				printf("∏ﬁ¿Œ ∏ﬁ¥∫ : m");
+				printf("Î©îÏù∏ Î©îÎâ¥ : m");
 			}
 
 			else if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) {
 				gotoxy(x, y + 6);
-				printf("≥≠¿Ãµµ : ¡ﬂ∞£");
+				printf("ÎÇúÏù¥ÎèÑ : Ï§ëÍ∞Ñ");
 				gotoxy(x, y + 7);
-				printf("≥≤¿∫ »˘∆Æ »Ωºˆ : %d",hint_count_medium);
+
+				printf("ÎÇ®ÏùÄ ÌûåÌä∏ ÌöüÏàò : %d", hint_count_medium);
+
 				ablenum(x, y);
 				gotoxy(x, y + 11);
-				printf("∏ﬁ¿Œ ∏ﬁ¥∫ : m");
+				printf("Î©îÏù∏ Î©îÎâ¥ : m");
 			}
 
 			else {
 				gotoxy(x, y + 6);
-				printf("≥≠¿Ãµµ : æÓ∑¡øÚ");
+				printf("ÎÇúÏù¥ÎèÑ : Ïñ¥Î†§ÏõÄ");
 				gotoxy(x, y + 7);
-				printf("≥≤¿∫ »˘∆Æ »Ωºˆ : %d",hint_count_hard);
+
+				printf("ÎÇ®ÏùÄ ÌûåÌä∏ ÌöüÏàò : %d", hint_count_hard);
+
 				ablenum(x, y);
 				gotoxy(x, y + 11);
-				printf("∏ﬁ¿Œ ∏ﬁ¥∫ : m");
+				printf("Î©îÏù∏ Î©îÎâ¥ : m");
 			}
 		}
 	}
@@ -358,167 +456,173 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 {
 	switch (key)
 	{
-	case 72:// ¿ß¬ (ªÛ) πÊ«‚¿« »≠ªÏ«• ≈∞ ¿‘∑¬
+	case 72:// ÏúÑÏ™Ω(ÏÉÅ) Î∞©Ìñ•Ïùò ÌôîÏÇ¥Ìëú ÌÇ§ ÏûÖÎ†•
 		*y1 = *y1 - 2;
 		if (*y1 < 2) {
-			*y1 = 2; // y¡¬«•¿« √÷º⁄∞™
-			numy = 0; // ¡¬«•∞™¿Ã √÷¥Î¿œ ∞ÊøÏ πËø≠ ∞™µµ √÷¥Î∏¶ ≥—¡ˆ æ µµ∑œ ∞Ì¡§
+			*y1 = 2; // yÏ¢åÌëúÏùò ÏµúÏÜüÍ∞í
+			numy = 0; // Ï¢åÌëúÍ∞íÏù¥ ÏµúÎåÄÏùº Í≤ΩÏö∞ Î∞∞Ïó¥ Í∞íÎèÑ ÏµúÎåÄÎ•º ÎÑòÏßÄ ÏïäÎèÑÎ°ù Í≥†Ï†ï
 			break;
 		}
 		else {
-			numy = numy - 1; // ƒøº≠¿« øÚ¡˜¿”ø° µ˚∂Û πËø≠ ¿ßƒ° º±≈√
+			numy = numy - 1; // Ïª§ÏÑúÏùò ÏõÄÏßÅÏûÑÏóê Îî∞Îùº Î∞∞Ïó¥ ÏúÑÏπò ÏÑ†ÌÉù
 			break;
 		}
-	case 75:// øﬁ¬ (¡¬) πÊ«‚¿« »≠ªÏ«• ≈∞ ¿‘∑¬
+	case 75:// ÏôºÏ™Ω(Ï¢å) Î∞©Ìñ•Ïùò ÌôîÏÇ¥Ìëú ÌÇ§ ÏûÖÎ†•
 		*x1 = *x1 - 4;
 		if (*x1 < 3) {
-			*x1 = 3; // x ¡¬«•¿« √÷º⁄∞™
-			numx = 0; // ¡¬«•∞™¿Ã √÷¥Î¿œ ∞ÊøÏ πËø≠ ∞™µµ √÷¥Î∏¶ ≥—¡ˆ æ µµ∑œ ∞Ì¡§
+			*x1 = 3; // x Ï¢åÌëúÏùò ÏµúÏÜüÍ∞í
+			numx = 0; // Ï¢åÌëúÍ∞íÏù¥ ÏµúÎåÄÏùº Í≤ΩÏö∞ Î∞∞Ïó¥ Í∞íÎèÑ ÏµúÎåÄÎ•º ÎÑòÏßÄ ÏïäÎèÑÎ°ù Í≥†Ï†ï
 			break;
 		}
 		else {
-			numx = numx - 1; // ƒøº≠¿« øÚ¡˜¿”ø° µ˚∂Û πËø≠ ¿ßƒ° º±≈√
+			numx = numx - 1; // Ïª§ÏÑúÏùò ÏõÄÏßÅÏûÑÏóê Îî∞Îùº Î∞∞Ïó¥ ÏúÑÏπò ÏÑ†ÌÉù
 			break;
 		}
-	case 77:// ø¿∏•¬ (øÏ) πÊ«‚¿« »≠ªÏ«• ≈∞ ¿‘∑¬
+	case 77:// Ïò§Î•∏Ï™Ω(Ïö∞) Î∞©Ìñ•Ïùò ÌôîÏÇ¥Ìëú ÌÇ§ ÏûÖÎ†•
 		*x1 = *x1 + 4;
 		if (*x1 > x_b) {
-			*x1 = x_b; // x ¡¬«•¿« √÷¥Î∞™
-			numx = 8; // ¡¬«•∞™¿Ã √÷¥Î¿œ ∞ÊøÏ πËø≠ ∞™µµ √÷¥Î∏¶ ≥—¡ˆ æ µµ∑œ ∞Ì¡§
+			*x1 = x_b; // x Ï¢åÌëúÏùò ÏµúÎåÄÍ∞í
+			numx = 8; // Ï¢åÌëúÍ∞íÏù¥ ÏµúÎåÄÏùº Í≤ΩÏö∞ Î∞∞Ïó¥ Í∞íÎèÑ ÏµúÎåÄÎ•º ÎÑòÏßÄ ÏïäÎèÑÎ°ù Í≥†Ï†ï
 			break;
 		}
 		else {
-			numx = numx + 1; // ƒøº≠¿« øÚ¡˜¿”ø° µ˚∂Û πËø≠ ¿ßƒ° º±≈√
+			numx = numx + 1; // Ïª§ÏÑúÏùò ÏõÄÏßÅÏûÑÏóê Îî∞Îùº Î∞∞Ïó¥ ÏúÑÏπò ÏÑ†ÌÉù
 			break;
 		}
-	case 80:// æ∆∑°¬ («œ) πÊ«‚¿« »≠ªÏ«• ≈∞ ¿‘∑¬
+	case 80:// ÏïÑÎûòÏ™Ω(Ìïò) Î∞©Ìñ•Ïùò ÌôîÏÇ¥Ìëú ÌÇ§ ÏûÖÎ†•
 		*y1 = *y1 + 2;
 		if (*y1 > y_b) {
-			*y1 = y_b;// y ¡¬«•¿« √÷¥Î∞™
-			numy = 8; // ¡¬«•∞™¿Ã √÷¥Î¿œ ∞ÊøÏ πËø≠ ∞™µµ √÷¥Î∏¶ ≥—¡ˆ æ µµ∑œ ∞Ì¡§
+			*y1 = y_b;// y Ï¢åÌëúÏùò ÏµúÎåÄÍ∞í
+			numy = 8; // Ï¢åÌëúÍ∞íÏù¥ ÏµúÎåÄÏùº Í≤ΩÏö∞ Î∞∞Ïó¥ Í∞íÎèÑ ÏµúÎåÄÎ•º ÎÑòÏßÄ ÏïäÎèÑÎ°ù Í≥†Ï†ï
 			break;
 		}
 		else {
-			numy = numy + 1; // ƒøº≠¿« øÚ¡˜¿”ø° µ˚∂Û πËø≠ ¿ßƒ° º±≈√
+			numy = numy + 1; // Ïª§ÏÑúÏùò ÏõÄÏßÅÏûÑÏóê Îî∞Îùº Î∞∞Ïó¥ ÏúÑÏπò ÏÑ†ÌÉù
 			break;
 		}
-	case 48: //º˝¿⁄≈∞ 0 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 48: //Ïà´ÏûêÌÇ§ 0 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 0;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 0∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 0;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 0Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 49: //º˝¿⁄≈∞ 1 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 49: //Ïà´ÏûêÌÇ§ 1 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 1;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 1∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 1;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 1Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 50: //º˝¿⁄≈∞ 2 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 50: //Ïà´ÏûêÌÇ§ 2 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 2;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 2∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 2;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 2Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 51: //º˝¿⁄≈∞ 3 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 51: //Ïà´ÏûêÌÇ§ 3 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 3;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 3∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 3;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 3Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 52: //º˝¿⁄≈∞ 4 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 52: //Ïà´ÏûêÌÇ§ 4 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 4;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 4∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 4;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 4Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 53: //º˝¿⁄≈∞ 5 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 53: //Ïà´ÏûêÌÇ§ 5 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 5;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 5∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 5;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 5Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 54: //º˝¿⁄≈∞ 6 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 54: //Ïà´ÏûêÌÇ§ 6 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 6;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 6∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 6;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 6Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 55: //º˝¿⁄≈∞ 7 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 55: //Ïà´ÏûêÌÇ§ 7 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 7;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 7∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 7;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 7Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 56: //º˝¿⁄≈∞ 8 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 56: //Ïà´ÏûêÌÇ§ 8 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 8;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 8∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 8;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 8Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	case 57: //º˝¿⁄≈∞ 9 ¿‘∑¬
-		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //πËø≠¿« ºˆ∞° 0¿œ ∞ÊøÏ
+	case 57: //Ïà´ÏûêÌÇ§ 9 ÏûÖÎ†•
+		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä 0Ïùº Í≤ΩÏö∞
 		{
-			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 9;  //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ 9∑Œ ∫Ø∞Ê
+			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 9;  //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º 9Î°ú Î≥ÄÍ≤Ω
 			break;
 		}
 		else
 			break;
-	
-	case 99: //øµæÓ c πˆ∆∞ ¿‘∑¬
-		if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) //≥≠¿Ãµµ Ω¨øÚ¿œ ∞ÊøÏ
+
+
+
+	case 99: //ÏòÅÏñ¥ c Î≤ÑÌäº ÏûÖÎ†•
+		if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) //ÎÇúÏù¥ÎèÑ Ïâ¨ÏõÄÏùº Í≤ΩÏö∞
 		{
 			if (hint_count_easy == 0)
 				break;
-			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //πËø≠¿« ºˆ∞° ¡§¥‰¿Ã æ∆¥“ ∞ÊøÏ
+			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä Ï†ïÎãµÏù¥ ÏïÑÎãê Í≤ΩÏö∞
 			{
-				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ ¡§¥‰¿∏∑Œ ∫Ø∞Ê
-				hint_count_easy = hint_count_easy - 1; //»˘∆Æ ∞πºˆ ¬˜∞®
+				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º Ï†ïÎãµÏúºÎ°ú Î≥ÄÍ≤Ω
+				hint_count_easy = hint_count_easy - 1; //ÌûåÌä∏ Í∞ØÏàò Ï∞®Í∞ê
 				break;
 			}
 			else
 				break;
 		}
-		if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) //≥≠¿Ãµµ ¡ﬂ∞£¿œ ∞ÊøÏ
+		if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) //ÎÇúÏù¥ÎèÑ Ï§ëÍ∞ÑÏùº Í≤ΩÏö∞
 		{
 			if (hint_count_medium == 0)
 				break;
-			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //πËø≠¿« ºˆ∞° ¡§¥‰¿Ã æ∆¥“ ∞ÊøÏ
+			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä Ï†ïÎãµÏù¥ ÏïÑÎãê Í≤ΩÏö∞
 			{
-				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ ¡§¥‰¿∏∑Œ ∫Ø∞Ê
-				hint_count_medium = hint_count_medium - 1; //»˘∆Æ ∞πºˆ ¬˜∞®
-					break;
+				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º Ï†ïÎãµÏúºÎ°ú Î≥ÄÍ≤Ω
+				hint_count_medium = hint_count_medium - 1; //ÌûåÌä∏ Í∞ØÏàò Ï∞®Í∞ê
+
+				break;
+
 			}
 			else
 				break;
 		}
-		if (sedoku_quiz == 10 || sedoku_quiz == 11 || sedoku_quiz == 12 || sedoku_quiz == 13 || sedoku_quiz == 14) //≥≠¿Ãµµ æÓ∑¡øÚ¿œ ∞ÊøÏ
+		if (sedoku_quiz == 10 || sedoku_quiz == 11 || sedoku_quiz == 12 || sedoku_quiz == 13 || sedoku_quiz == 14) //ÎÇúÏù¥ÎèÑ Ïñ¥Î†§ÏõÄÏùº Í≤ΩÏö∞
 		{
 			if (hint_count_hard == 0)
 				break;
-			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //πËø≠¿« ºˆ∞° ¡§¥‰¿Ã æ∆¥“ ∞ÊøÏ
+			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //Î∞∞Ïó¥Ïùò ÏàòÍ∞Ä Ï†ïÎãµÏù¥ ÏïÑÎãê Í≤ΩÏö∞
 			{
-				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //«ÿ¥Á«œ¥¬ πËø≠¿« ºˆ∏¶ ¡§¥‰¿∏∑Œ ∫Ø∞Ê
-				hint_count_hard = hint_count_hard - 1; //»˘∆Æ ∞πºˆ ¬˜∞®
-					break;
+				sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]; //Ìï¥ÎãπÌïòÎäî Î∞∞Ïó¥Ïùò ÏàòÎ•º Ï†ïÎãµÏúºÎ°ú Î≥ÄÍ≤Ω
+				hint_count_hard = hint_count_hard - 1; //ÌûåÌä∏ Í∞ØÏàò Ï∞®Í∞ê
+
+				break;
+
 			}
 			else
 				break;
@@ -534,8 +638,10 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else {
 			break;
 		}
-	case 109:  // m ¿‘∑¬ -> ∏ﬁ¿Œ»≠∏È
-		if(true)
+	case 109:  // m ÏûÖÎ†• -> Î©îÏù∏ÌôîÎ©¥
+
+		if (true)
+
 		{
 			cheat(sedoku_quiz);
 			break;
@@ -569,7 +675,9 @@ void print_sedoku(int count_num) {
 		cout << "\n";
 	}
 }
-void check1(bool check[], int x, int count_num,int cnt) {
+
+void check1(bool check[], int x, int count_num, int cnt) {
+
 	for (int i = 0; i < 9; i++) {
 		if (sedoku_table[count_num][cnt][x][i] != 0) {
 			int where = sedoku_table[count_num][cnt][x][i] - 1;
@@ -579,7 +687,9 @@ void check1(bool check[], int x, int count_num,int cnt) {
 
 }
 
-void check2(bool check[], int y, int count_num,int cnt) {
+
+void check2(bool check[], int y, int count_num, int cnt) {
+
 	for (int i = 0; i < 9; i++) {
 		if (sedoku_table[count_num][cnt][i][y] != 0) {
 			int where = sedoku_table[count_num][cnt][i][y] - 1;
@@ -589,7 +699,9 @@ void check2(bool check[], int y, int count_num,int cnt) {
 		}
 	}
 }
-void check3(bool check[], int x, int y, int count_num,int cnt) {
+
+void check3(bool check[], int x, int y, int count_num, int cnt) {
+
 	int xx = x / 3;
 	int yy = y / 3;
 	for (int i = 3 * xx; i < 3 * xx + 3; i++) {
@@ -606,14 +718,16 @@ void check3(bool check[], int x, int y, int count_num,int cnt) {
 
 }
 
-void ablenum(int x , int y) {
+
+void ablenum(int x, int y) {
 	bool canable[9] = { false, false, false, false, false, false, false, false, false };
-	check1(canable, numy, sedoku_quiz,2);
-	check2(canable, numx, sedoku_quiz,2);
-	check3(canable, numy, numx, sedoku_quiz,2);
-	gotoxy( x , y + 8);
+	check1(canable, numy, sedoku_quiz, 2);
+	check2(canable, numx, sedoku_quiz, 2);
+	check3(canable, numy, numx, sedoku_quiz, 2);
+	gotoxy(x, y + 8);
+
 	if (sedoku_table[sedoku_quiz][0][numy][numx] == 0) {
-		cout << "ªÁøÎ∞°¥…«— º˝¿⁄: ";
+		cout << "ÏÇ¨Ïö©Í∞ÄÎä•Ìïú Ïà´Ïûê: ";
 		for (int i = 0; i < 9; i++) {
 
 			if (canable[i] == false) {
@@ -633,21 +747,23 @@ void dfs(int cnt, int count_num) {
 	}
 	if (cnt == xy.size()) {
 		istrue = true;
-		//«ÿ¥Áƒ⁄µÂ¥¬ »Æ¿Œ«œ∞Ì ΩÕ¿ª∂ß∏∏ ¡÷ºÆ√≥∏Æ∏¶ «ÿ¡›¥œ¥Ÿ.print_sedoku(count_num);
+		//Ìï¥ÎãπÏΩîÎìúÎäî ÌôïÏù∏ÌïòÍ≥† Ïã∂ÏùÑÎïåÎßå Ï£ºÏÑùÏ≤òÎ¶¨Î•º Ìï¥Ï§çÎãàÎã§.print_sedoku(count_num);
 		return;
 	}
 
 	int x = xy[cnt].first;
 	int y = xy[cnt].second;
 	bool can[9] = { false,false,false,false,false,false,false,false,false };
-	check1(can, x, count_num,1);
 
-	check2(can, y, count_num,1);
+	check1(can, x, count_num, 1);
 
-	check3(can, x, y, count_num,1);
+	check2(can, y, count_num, 1);
+
+	check3(can, x, y, count_num, 1);
 
 
-	//xy¡¬«•∑Œ ∞°¥…«— ∏ÆΩ∫∆Æ ∫“∑Øø¬¥Ÿ
+
+	//xyÏ¢åÌëúÎ°ú Í∞ÄÎä•Ìïú Î¶¨Ïä§Ìä∏ Î∂àÎü¨Ïò®Îã§
 	for (int i = 0; i < 9; i++) {
 		if (can[i] == false) {
 			sedoku_table[count_num][1][x][y] = i + 1;
@@ -693,9 +809,9 @@ void find_sedoku() {
 		}
 	}
 
-	// ≥°
+	// ÎÅù
 
-	//∞¢ø‰º“µÈø° ¥Î«ÿ πÈ∆Æ∑°≈∑¿∏∑Œ µπ∏Æ∞Ì ±◊∞™¿ª πﬁæ∆ø¬¥¬ ∫Œ∫–
+	//Í∞ÅÏöîÏÜåÎì§Ïóê ÎåÄÌï¥ Î∞±Ìä∏ÎûòÌÇπÏúºÎ°ú ÎèåÎ¶¨Í≥† Í∑∏Í∞íÏùÑ Î∞õÏïÑÏò®Îäî Î∂ÄÎ∂Ñ
 	for (int q = 0; q < 15; q++) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -704,7 +820,7 @@ void find_sedoku() {
 		}
 		dfs(0, q);
 		xy.clear();
-		vector<pair<int, int>>().swap(xy);//vector √ ±‚»≠
+		vector<pair<int, int>>().swap(xy);//vector Ï¥àÍ∏∞Ìôî
 		istrue = false;
 
 	}
@@ -735,11 +851,11 @@ int keyControl()
 	}
 }
 
-void init() // ƒ‹º÷ √¢ º≥¡§ «‘ºˆ 
+void init() // ÏΩòÏÜî Ï∞Ω ÏÑ§Ï†ï Ìï®Ïàò 
 {
-	system("mode con cols=100 lines=20 | title ∞‘ ¿” ¡¶ ∏Ò"); // √¢ ≥–¿Ã
+	system("mode con cols=100 lines=20 | title Í≤å ÏûÑ Ï†ú Î™©"); // Ï∞Ω ÎÑìÏù¥
 
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // ƒøº≠ º˚±Ë √≥∏Æ
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // Ïª§ÏÑú Ïà®ÍπÄ Ï≤òÎ¶¨
 	CONSOLE_CURSOR_INFO ConsoleCursor;
 	ConsoleCursor.bVisible = 0;
 	ConsoleCursor.dwSize = 1;
@@ -747,44 +863,45 @@ void init() // ƒ‹º÷ √¢ º≥¡§ «‘ºˆ
 }
 void CursorView()
 {
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // ƒøº≠ º˚±Ë √≥∏Æ
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // Ïª§ÏÑú Ïà®ÍπÄ Ï≤òÎ¶¨
 	CONSOLE_CURSOR_INFO ConsoleCursor;
 	ConsoleCursor.bVisible = true;
 	ConsoleCursor.dwSize = 1;
 	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
 }
 
-void textcolor(int color_number) // πÆ¿⁄ ªˆªÛ ∫Ø∞Ê Ω«ºˆ
+void textcolor(int color_number) // Î¨∏Ïûê ÏÉâÏÉÅ Î≥ÄÍ≤Ω Ïã§Ïàò
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
 }
 
 void titleDraw()
 {
+	SetColor(W_Color);
 	printf("\n\n\n\n");
-	printf("   °·°·°·     °·°·°·°·   °·°·°·       °·°·     °·   °·   °·    °·     \n");
-	printf("  °·          °·         °·    °·   °·    °·   °· °·     °·    °·     \n");
-	printf("   °·°·°·     °·°·°·°·   °·    °·   °·    °·   °·°·      °·    °·     \n");
-	printf("         °·   °·         °·    °·   °·    °·   °· °·     °·    °·     \n");
-	printf("   °·°·°·     °·°·°·°·    °·°·°·      °·°·     °·   °·     °·°·       \n");
+	printf("   ‚ñ†‚ñ†‚ñ†     ‚ñ†‚ñ†‚ñ†‚ñ†   ‚ñ†‚ñ†‚ñ†       ‚ñ†‚ñ†     ‚ñ†   ‚ñ†   ‚ñ†    ‚ñ†     \n");
+	printf("  ‚ñ†          ‚ñ†         ‚ñ†    ‚ñ†   ‚ñ†    ‚ñ†   ‚ñ† ‚ñ†     ‚ñ†    ‚ñ†     \n");
+	printf("   ‚ñ†‚ñ†‚ñ†     ‚ñ†‚ñ†‚ñ†‚ñ†   ‚ñ†    ‚ñ†   ‚ñ†    ‚ñ†   ‚ñ†‚ñ†      ‚ñ†    ‚ñ†     \n");
+	printf("         ‚ñ†   ‚ñ†         ‚ñ†    ‚ñ†   ‚ñ†    ‚ñ†   ‚ñ† ‚ñ†     ‚ñ†    ‚ñ†     \n");
+	printf("   ‚ñ†‚ñ†‚ñ†     ‚ñ†‚ñ†‚ñ†‚ñ†    ‚ñ†‚ñ†‚ñ†      ‚ñ†‚ñ†     ‚ñ†   ‚ñ†     ‚ñ†‚ñ†       \n");
 }
 
 int menuDraw()
 {
 	int x = 24;
 	int y = 12;
-	gotoxy(x - 2, y); // -2 «— ¿Ã¿Ø¥¬ > ∏¶ √‚∑¬«ÿæﬂ«œ±‚ ∂ßπÆø°
-	printf("> ∞‘¿”Ω√¿€");
+	gotoxy(x - 2, y); // -2 Ìïú Ïù¥Ïú†Îäî > Î•º Ï∂úÎ†•Ìï¥ÏïºÌïòÍ∏∞ ÎïåÎ¨∏Ïóê
+	printf("> Í≤åÏûÑÏãúÏûë");
 	gotoxy(x, y + 1);
-	printf("∞‘¿”¡§∫∏");
+	printf("Í≤åÏûÑÏ†ïÎ≥¥");
 	gotoxy(x, y + 2);
-	printf("¡æ∑·");
+	printf("Ï¢ÖÎ£å");
 
 	while (1)
-	{ // π´«—π›∫π
+	{ // Î¨¥ÌïúÎ∞òÎ≥µ
 		int n = keyControl();
 		switch (n) {
-		case UP: { //¿‘∑¬«— ≈∞øÕ ∞™¿Ã UP¿Œ ∞ÊøÏ (w)
+		case UP: { //ÏûÖÎ†•Ìïú ÌÇ§ÏôÄ Í∞íÏù¥ UPÏù∏ Í≤ΩÏö∞ (w)
 			if (y > 12) {
 				gotoxy(x - 2, y);
 				printf(" ");
@@ -815,16 +932,16 @@ int maplistDraw() {
 	int y = 6;
 	system("cls");
 	printf("\n\n");
-	printf("                     [ ∏  º±≈√ ]\n\n");
+	printf("                     [ Îßµ ÏÑ†ÌÉù ]\n\n");
 
 	gotoxy(x - 2, y);
-	printf("> Ω¨øÚ");
+	printf("> Ïâ¨ÏõÄ");
 	gotoxy(x, y + 1);
-	printf("¡ﬂ∞£");
+	printf("Ï§ëÍ∞Ñ");
 	gotoxy(x, y + 2);
-	printf("æÓ∑¡øÚ");
+	printf("Ïñ¥Î†§ÏõÄ");
 	gotoxy(x, y + 3);
-	printf("µ⁄∑Œ");
+	printf("Îí§Î°ú");
 
 	while (1) {
 		int n = keyControl();
@@ -837,6 +954,7 @@ int maplistDraw() {
 				printf(">");
 			}
 			break;
+
 		}
 		case DOWN: {
 			if (y < 9) {
@@ -856,13 +974,14 @@ int maplistDraw() {
 }
 
 void infoDraw() {
-	system("cls"); //»≠∏È ∏µŒ ¡ˆøÏ±‚
-	printf("∞‘¿”º≥∏Ì");
+	system("cls"); //ÌôîÎ©¥ Î™®Îëê ÏßÄÏö∞Í∏∞
+	printf("Í≤åÏûÑÏÑ§Î™Ö");
 
 	while (1) {
 		if (keyControl() == SUBMIT) {
 			break;
 		}
+
 	}
 }
 
@@ -873,4 +992,6 @@ void cheat(int num) {
 		}
 	}
 
+
 }
+
