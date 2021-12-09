@@ -159,6 +159,12 @@ int main() {
 						result = abc(sedoku_quiz);
 						timestart = clock();
 						gametime = (double)(timestart) / CLOCKS_PER_SEC;
+						if (key = 109) 
+						{
+							titleDraw();
+							menuDraw();
+							break;
+						}
 					}
 					hint_count_easy = 3;
 					timeend = clock();
