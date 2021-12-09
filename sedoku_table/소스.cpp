@@ -208,6 +208,12 @@ int main() {
 						result = abc(sedoku_quiz);
 						timestart = clock();
 						gametime = (double)(timestart) / CLOCKS_PER_SEC;
+						if (key = 109)
+						{
+							titleDraw();
+							menuDraw();
+							break;
+						}
 					}
 					hint_count_medium = 2;
 					timeend = clock();
@@ -250,6 +256,12 @@ int main() {
 						result = abc(sedoku_quiz);
 						timestart = clock();
 						gametime = (double)(timestart) / CLOCKS_PER_SEC;
+						if (key = 109)
+						{
+							titleDraw();
+							menuDraw();
+							break;
+						}
 
 					}
 					hint_count_hard = 1;
@@ -600,18 +612,6 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else {
 			break;
 		}
-	case 109:  // m 입력 -> 메인화면
-		if (true)
-		{
-			cheat(sedoku_quiz);
-			break;
-
-		}
-		else
-		{
-			break;
-		}
-
 
 	default:
 		return;
