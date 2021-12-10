@@ -29,6 +29,7 @@ void dfs(int cnt, int count_num);
 void find_sedoku();
 void cheat(int num);
 void ablenum(int x, int y);
+void gamedraw(int n);
 
 clock_t timestart, timeend;
 double timeresult;
@@ -82,6 +83,7 @@ bool abc(int Sedoku_quiz)
 	}
 	finished[Sedoku_quiz] = true;
 	return true;
+
 }
 
 bool count(int sedoku_quiz) {
@@ -122,13 +124,9 @@ extern int sedoku_change = 2;
 extern int hint_count_easy = 3; //쉬움 난이도 힌트 갯수
 extern int hint_count_medium = 2; // 중간 난이도 힌트 갯수
 extern int hint_count_hard = 1; // 어려움 난이도 힌트 갯수
-
+bool result = false;
 int main() {
-	bool result = false;
-	find_sedoku();
-	srand(time(NULL));
-	char key;
-	int x = 3, y = 2;
+	
 
 
 	while (result != true) {
@@ -137,116 +135,10 @@ int main() {
 
 		if (menuCode == 0) { //게임시작
 
-			int n = maplistDraw();
+			int q = maplistDraw();
+			gamedraw(q);
 			system("cls");
-			if (n == 0) {
-				//쉬움
-				sedoku_quiz = rand() % 5;
-				if (count(sedoku_quiz) == false) {
-
-					while (finished[sedoku_quiz] == true) {
-						sedoku_quiz = rand() % 5;
-					}
-					system("cls");
-
-					while (result != true) {
-
-						draw_plate(9, 9);
-						gotoxy(x, y);
-						key = _getch();
-						move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
-						Sleep(10);
-						system("cls");
-						result = abc(sedoku_quiz);
-						timestart = clock();
-						gametime = (double)(timestart) / CLOCKS_PER_SEC;
-
-					}
-					hint_count_easy = 3;
-					printf("스도쿠를 성공하셨습니다\n");
-					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
-					getchar();
-					system("cls");
-					result = false;
-					Sleep(1000);
-				}
-				else {
-					printf("더이상 풀문제가 없습니다.");
-					getchar();
-					system("cls");
-				}
-			}
-			else if (n == 1) {
-				//중간
-				sedoku_quiz = rand() % 5 + 5;
-				if (count(sedoku_quiz) == false) {
-
-					while (finished[sedoku_quiz] == true) {
-						sedoku_quiz = rand() % 5 + 5;
-					}
-					system("cls");
-					while (result != true) {
-
-						draw_plate(9, 9);
-						gotoxy(x, y);
-						key = _getch();
-						move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
-						Sleep(10);
-						system("cls");
-						result = abc(sedoku_quiz);
-					}
-					hint_count_medium = 2;
-					printf("스도쿠를 성공하셨습니다\n");
-					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
-					getchar();
-					system("cls");
-					result = false;
-					Sleep(1000);
-				}
-				else {
-					printf("더이상 풀문제가 없습니다.");
-					getchar();
-					system("cls");
-				}
-
-
-
-			}
-			else if (n == 2) {
-				//어려움
-				sedoku_quiz = rand() % 5 + 10;
-				if (count(sedoku_quiz) == false) {
-
-					while (finished[sedoku_quiz] == true) {
-						sedoku_quiz = rand() % 5 + 10;
-					}
-					while (result != true) {
-
-						draw_plate(9, 9);
-						gotoxy(x, y);
-						key = _getch();
-						move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
-						Sleep(10);
-						system("cls");
-						result = abc(sedoku_quiz);
-
-					}
-					hint_count_hard = 1;
-					printf("스도쿠를 성공하셨습니다\n");
-					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
-					getchar();
-					system("cls");
-					result = false;
-					Sleep(1000);
-				}
-
-				else {
-					printf("더이상 풀문제가 없습니다.");
-					getchar();
-					system("cls");
-
-				}
-			}
+			
 		}
 		else if (menuCode == 1) {
 			infoDraw(); //게임정보
@@ -258,11 +150,328 @@ int main() {
 	}
 	return 0;
 }
+
+//게임 시작 전 백트래킹 관련 함수
+
+void gotoxy(int x, int y) {
+	COORD Pos = { x - 1, y - 1 };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+}
+
+void check1(bool check[], int x, int count_num, int cnt) {
+	for (int i = 0; i < 9; i++) {
+		if (sedoku_table[count_num][cnt][x][i] != 0) {
+			int where = sedoku_table[count_num][cnt][x][i] - 1;
+			check[where] = true;
+		}
+	}
+
+}
+
+void check2(bool check[], int y, int count_num, int cnt) {
+	for (int i = 0; i < 9; i++) {
+		if (sedoku_table[count_num][cnt][i][y] != 0) {
+			int where = sedoku_table[count_num][cnt][i][y] - 1;
+			if (check[where] == false) {
+				check[where] = true;
+			}
+		}
+	}
+}
+void check3(bool check[], int x, int y, int count_num, int cnt) {
+	int xx = x / 3;
+	int yy = y / 3;
+	for (int i = 3 * xx; i < 3 * xx + 3; i++) {
+		for (int j = 3 * yy; j < yy * 3 + 3; j++) {
+			if (sedoku_table[count_num][cnt][i][j] != 0) {
+				int where = sedoku_table[count_num][cnt][i][j] - 1;
+				if (check[where] == false) {
+					check[where] = true;
+				}
+
+			}
+		}
+	}
+
+}
+
+void ablenum(int x, int y) {
+	bool canable[9] = { false, false, false, false, false, false, false, false, false };
+	check1(canable, numy, sedoku_quiz, 2);
+	check2(canable, numx, sedoku_quiz, 2);
+	check3(canable, numy, numx, sedoku_quiz, 2);
+	gotoxy(x, y + 8);
+	if (sedoku_table[sedoku_quiz][0][numy][numx] == 0) {
+		cout << "사용가능한 숫자: ";
+		for (int i = 0; i < 9; i++) {
+
+			if (canable[i] == false) {
+				cout << i + 1 << ' ';
+			}
+
+		}
+	}
+
+
+}
+bool istrue = false;
+void dfs(int cnt, int count_num) {
+
+	if (istrue == true) {
+		return;
+	}
+	if (cnt == xy.size()) {
+		istrue = true;
+		//해당코드는 확인하고 싶을때만 주석처리를 해줍니다.print_sedoku(count_num);
+		return;
+	}
+
+	int x = xy[cnt].first;
+	int y = xy[cnt].second;
+	bool can[9] = { false,false,false,false,false,false,false,false,false };
+	check1(can, x, count_num, 1);
+
+	check2(can, y, count_num, 1);
+
+	check3(can, x, y, count_num, 1);
+
+
+	//xy좌표로 가능한 리스트 불러온다
+	for (int i = 0; i < 9; i++) {
+		if (can[i] == false) {
+			sedoku_table[count_num][1][x][y] = i + 1;
+			dfs(cnt + 1, count_num);
+			if (istrue == true) {
+				return;
+			}
+			sedoku_table[count_num][1][x][y] = 0;
+
+
+
+		}
+	}
+}
+void find_sedoku() {
+
+	sedoku_set[0].push_back("004130020900000600802509000001003000000890406400000093730904162150000800240718059");
+	sedoku_set[1].push_back("106009000000300010290000406607095843532018690040073000005900301020006000000504760");
+	sedoku_set[2].push_back("000200086100890007030000912345170600090052000706943058000004005007519043004306000");
+	sedoku_set[3].push_back("070000060000067105005029304009076501700000000310045820038001090507693018090480050");
+	sedoku_set[4].push_back("006157800010390005053080090827009000649800000030070900000400308074920501180060029");
+	sedoku_set[5].push_back("900000083000082409870940000030097005500020000600105890056000300000356947000000500");
+	sedoku_set[6].push_back("910056003000800000260000500009420008806000030540080000004100805000090070380700029");
+	sedoku_set[7].push_back("840000102502008000000032084050790000384000759090000000900050308028007960000009001");
+	sedoku_set[8].push_back("030000694740000010006080000070400209500000070020700001004002100250001046003049008");
+	sedoku_set[9].push_back("130400000500060030000000209407013060000204190900080002800340900300006801000001003");
+	sedoku_set[10].push_back("003600000900800207000000000040150830070004000820000000090005308500760400000000560");
+	sedoku_set[11].push_back("000000030105000040300209650753000010000063000090500000000095000031720004049010500");
+	sedoku_set[12].push_back("900402500000901000050000007400020080002000734508006000000800020700000001090260000");
+	sedoku_set[13].push_back("308900010029005700061000020030400157045010000006003200000500000200000030600007009");
+	sedoku_set[14].push_back("000201000002005009050080006000000000300050090080070004040090070020000010008710030");
+
+	for (int i = 0; i < 15; i++) {
+		for (int j = 0; j < 1; j++) {
+			for (int p = 0; p < 9; p++) {
+				for (int q = 0; q < 9; q++) {
+					int num = sedoku_set[i][j][p * 9 + q] - '0';
+					sedoku_table[i][j][p][q] = num;
+					sedoku_table[i][1][p][q] = num;
+					sedoku_table[i][2][p][q] = num;
+				}
+			}
+		}
+	}
+
+
+
+//각요소들에 대해 백트래킹으로 돌리고 그값을 받아온는 부분
+	for (int q = 0; q < 15; q++) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (sedoku_table[q][1][i][j] == 0) xy.push_back(make_pair(i, j));
+			}
+		}
+		dfs(0, q);
+		xy.clear();
+		vector<pair<int, int>>().swap(xy);//vector 초기화
+		istrue = false;
+
+	}
+}
+// 끝
+
+
+
+
+
+
+//게임 시작 함수
+void infoDraw() {
+	system("cls"); //화면 모두 지우기
+	printf("게임설명");
+
+	while (1) {
+		if (keyControl() == SUBMIT) {
+			break;
+		}
+	}
+}
+
+int keyControl()
+{
+	char temp = _getch();
+
+	if (temp == 'w' || temp == 'W')
+	{
+		return UP;
+	}
+	else if (temp == 'a' || temp == 'A')
+	{
+		return LEFT;
+	}
+	else if (temp == 's' || temp == 'S')
+	{
+		return DOWN;
+	}
+	else if (temp == 'd' || temp == 'D')
+	{
+		return RIGHT;
+	}
+	else if (temp == ' ')
+	{
+		return SUBMIT;
+	}
+}
+
+void init() // 콘솔 창 설정 함수 
+{
+	system("mode con cols=100 lines=20 | title 게 임 제 목"); // 창 넓이
+
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+	ConsoleCursor.bVisible = 0;
+	ConsoleCursor.dwSize = 1;
+	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
+}
+void CursorView()
+{
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+	ConsoleCursor.bVisible = true;
+	ConsoleCursor.dwSize = 1;
+	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
+}
+
+void textcolor(int color_number) // 문자 색상 변경 실수
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
+}
+
+void titleDraw()
+{
+	printf("\n\n\n\n");
+	printf("   ■■■     ■■■■   ■■■       ■■     ■   ■   ■    ■     \n");
+	printf("  ■          ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
+	printf("   ■■■     ■■■■   ■    ■   ■    ■   ■■      ■    ■     \n");
+	printf("         ■   ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
+	printf("   ■■■     ■■■■    ■■■      ■■     ■   ■     ■■       \n");
+}
+
+int menuDraw()
+{
+	int x = 24;
+	int y = 12;
+	gotoxy(x - 2, y); // -2 한 이유는 > 를 출력해야하기 때문에
+	printf("> 게임시작");
+	gotoxy(x, y + 1);
+	printf("게임정보");
+	gotoxy(x, y + 2);
+	printf("종료");
+
+	while (1)
+	{ // 무한반복
+		int n = keyControl();
+		switch (n) {
+		case UP: { //입력한 키와 값이 UP인 경우 (w)
+			if (y > 12) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, --y);
+				printf(">");
+			}
+			break;
+		}
+
+		case DOWN: {
+			if (y < 14) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, ++y);
+				printf(">");
+			}
+			break;
+		}
+
+		case SUBMIT: {
+			return y - 12; }
+		}
+	}
+}
+
+int maplistDraw() {
+	int x = 24;
+	int y = 6;
+	system("cls");
+	printf("\n\n");
+	printf("                     [ 맵 선택 ]\n\n");
+
+	gotoxy(x - 2, y);
+	printf("> 쉬움");
+	gotoxy(x, y + 1);
+	printf("중간");
+	gotoxy(x, y + 2);
+	printf("어려움");
+	gotoxy(x, y + 3);
+	printf("뒤로");
+
+	while (1) {
+		int n = keyControl();
+		switch (n) {
+		case UP: {
+			if (y > 6) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, --y);
+				printf(">");
+			}
+			break;
+		}
+		case DOWN: {
+			if (y < 9) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, ++y);
+				printf(">");
+			}
+			break;
+		}
+
+		case SUBMIT: {
+			return y - 6;
+		}
+		}
+	}
+}
+
+// 끝
+
+//게임 진행 화면 함수
 void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 {
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
+
 	for (i = 1; i < 12; i++) // 스도쿠 테두리 모양 저장 ex) {"┏", "━", "┯", "┓"},
 	{
 		b[i] = 0xa0 + i;
@@ -341,8 +550,9 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	printf("%c%c", a, b[5]);
 	printf("\n");
 	{
-		{
-			int x = 40;
+		{	
+			
+			int x = 45;
 			int y = 2;
 			printf("\n");
 			gotoxy(x - 2, y);
@@ -356,7 +566,8 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 			printf("힌트 : c\n");
 
 
-			if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) {
+			if (sedoku_quiz / 5 == 0) {
+				
 				gotoxy(x, y + 6);
 				printf("난이도 : 쉬움");
 				printf("경과시간: %0.3lf\n", gametime);
@@ -367,7 +578,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				printf("메인 메뉴 : m");
 			}
 
-			else if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) {
+			else if (sedoku_quiz / 5 == 1) {
 				gotoxy(x, y + 6);
 				printf("난이도 : 중간");
 				gotoxy(x, y + 7);
@@ -520,7 +731,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 
 	case 99: //영어 c 버튼 입력
-		if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) //난이도 쉬움일 경우
+		if (sedoku_quiz /5 == 0 ) //난이도 쉬움일 경우
 		{
 			if (hint_count_easy == 0)
 				break;
@@ -533,7 +744,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			else
 				break;
 		}
-		if (sedoku_quiz == 5 || sedoku_quiz == 6 || sedoku_quiz == 7 || sedoku_quiz == 8 || sedoku_quiz == 9) //난이도 중간일 경우
+		if (sedoku_quiz/5 == 1) //난이도 중간일 경우
 		{
 			if (hint_count_medium == 0)
 				break;
@@ -546,7 +757,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			else
 				break;
 		}
-		if (sedoku_quiz == 10 || sedoku_quiz == 11 || sedoku_quiz == 12 || sedoku_quiz == 13 || sedoku_quiz == 14) //난이도 어려움일 경우
+		if (sedoku_quiz / 5 == 2) //난이도 어려움일 경우
 		{
 			if (hint_count_hard == 0)
 				break;
@@ -591,317 +802,63 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 
 
 
-void gotoxy(int x, int y) {
-	COORD Pos = { x - 1, y - 1 };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
-}
-void print_sedoku(int count_num) {
 
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
-			cout << sedoku_table[count_num][1][i][j] << " ";
 
+
+void gamedraw(int n) {
+
+	find_sedoku();
+	srand(time(NULL));
+	char key;
+	int x = 3, y = 2;
+	int sedokuarr[3] = { 0,1,2 };
+	int* sedokuhint[3] = { &hint_count_easy, &hint_count_medium, &hint_count_hard };
+	int hintcount[3] = { 3,2,1 };
+	sedoku_quiz = rand() % 5 + sedokuarr[n] * 5;
+	if (count(sedoku_quiz) == false) {
+
+		while (finished[sedoku_quiz] == true) {
+			sedoku_quiz = rand() % 5;
 		}
-		cout << "\n";
-	}
-}
-void check1(bool check[], int x, int count_num, int cnt) {
-	for (int i = 0; i < 9; i++) {
-		if (sedoku_table[count_num][cnt][x][i] != 0) {
-			int where = sedoku_table[count_num][cnt][x][i] - 1;
-			check[where] = true;
+		system("cls");
+
+		timestart = clock();
+		timeend = clock();
+
+		while (result != true) {
+
+			timestart = clock() - timeend;
+			gametime = (double)(timestart) / CLOCKS_PER_SEC;
+			draw_plate(9, 9);
+			gotoxy(x, y);
+			key = _getch();
+			move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
+			Sleep(10);
+			system("cls");
+			result = abc(sedoku_quiz);
+			timestart = clock();
 		}
+		*sedokuhint[n] = hintcount[n];
+		timeend = clock();
+		result = false;
+		timeresult = (double)(timestart) / CLOCKS_PER_SEC;
+		printf("경과시간: %0.3lf\n", timeresult);
+		printf("스도쿠를 성공하셨습니다\n");
+		printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
+
+		Sleep(1000);
+		timeend = clock();
+		timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
+		printf("경과시간: %0.3lf\n", timeresult);
+		getchar();
+
+
+		system("cls");
 	}
-
-}
-
-void check2(bool check[], int y, int count_num, int cnt) {
-	for (int i = 0; i < 9; i++) {
-		if (sedoku_table[count_num][cnt][i][y] != 0) {
-			int where = sedoku_table[count_num][cnt][i][y] - 1;
-			if (check[where] == false) {
-				check[where] = true;
-			}
-		}
-	}
-}
-void check3(bool check[], int x, int y, int count_num, int cnt) {
-	int xx = x / 3;
-	int yy = y / 3;
-	for (int i = 3 * xx; i < 3 * xx + 3; i++) {
-		for (int j = 3 * yy; j < yy * 3 + 3; j++) {
-			if (sedoku_table[count_num][cnt][i][j] != 0) {
-				int where = sedoku_table[count_num][cnt][i][j] - 1;
-				if (check[where] == false) {
-					check[where] = true;
-				}
-
-			}
-		}
-	}
-
-}
-
-void ablenum(int x, int y) {
-	bool canable[9] = { false, false, false, false, false, false, false, false, false };
-	check1(canable, numy, sedoku_quiz, 2);
-	check2(canable, numx, sedoku_quiz, 2);
-	check3(canable, numy, numx, sedoku_quiz, 2);
-	gotoxy(x, y + 8);
-	if (sedoku_table[sedoku_quiz][0][numy][numx] == 0) {
-		cout << "사용가능한 숫자: ";
-		for (int i = 0; i < 9; i++) {
-
-			if (canable[i] == false) {
-				cout << i + 1 << ' ';
-			}
-
-		}
-	}
-
 
 }
-bool istrue = false;
-void dfs(int cnt, int count_num) {
 
-	if (istrue == true) {
-		return;
-	}
-	if (cnt == xy.size()) {
-		istrue = true;
-		//해당코드는 확인하고 싶을때만 주석처리를 해줍니다.print_sedoku(count_num);
-		return;
-	}
-
-	int x = xy[cnt].first;
-	int y = xy[cnt].second;
-	bool can[9] = { false,false,false,false,false,false,false,false,false };
-	check1(can, x, count_num, 1);
-
-	check2(can, y, count_num, 1);
-
-	check3(can, x, y, count_num, 1);
-
-
-	//xy좌표로 가능한 리스트 불러온다
-	for (int i = 0; i < 9; i++) {
-		if (can[i] == false) {
-			sedoku_table[count_num][1][x][y] = i + 1;
-			dfs(cnt + 1, count_num);
-			if (istrue == true) {
-				return;
-			}
-			sedoku_table[count_num][1][x][y] = 0;
-
-
-
-		}
-	}
-}
-void find_sedoku() {
-
-	sedoku_set[0].push_back("004130020900000600802509000001003000000890406400000093730904162150000800240718059");
-	sedoku_set[1].push_back("106009000000300010290000406607095843532018690040073000005900301020006000000504760");
-	sedoku_set[2].push_back("000200086100890007030000912345170600090052000706943058000004005007519043004306000");
-	sedoku_set[3].push_back("070000060000067105005029304009076501700000000310045820038001090507693018090480050");
-	sedoku_set[4].push_back("006157800010390005053080090827009000649800000030070900000400308074920501180060029");
-	sedoku_set[5].push_back("900000083000082409870940000030097005500020000600105890056000300000356947000000500");
-	sedoku_set[6].push_back("910056003000800000260000500009420008806000030540080000004100805000090070380700029");
-	sedoku_set[7].push_back("840000102502008000000032084050790000384000759090000000900050308028007960000009001");
-	sedoku_set[8].push_back("030000694740000010006080000070400209500000070020700001004002100250001046003049008");
-	sedoku_set[9].push_back("130400000500060030000000209407013060000204190900080002800340900300006801000001003");
-	sedoku_set[10].push_back("003600000900800207000000000040150830070004000820000000090005308500760400000000560");
-	sedoku_set[11].push_back("000000030105000040300209650753000010000063000090500000000095000031720004049010500");
-	sedoku_set[12].push_back("900402500000901000050000007400020080002000734508006000000800020700000001090260000");
-	sedoku_set[13].push_back("308900010029005700061000020030400157045010000006003200000500000200000030600007009");
-	sedoku_set[14].push_back("000201000002005009050080006000000000300050090080070004040090070020000010008710030");
-
-	for (int i = 0; i < 15; i++) {
-		for (int j = 0; j < 1; j++) {
-			for (int p = 0; p < 9; p++) {
-				for (int q = 0; q < 9; q++) {
-					int num = sedoku_set[i][j][p * 9 + q] - '0';
-					sedoku_table[i][j][p][q] = num;
-					sedoku_table[i][1][p][q] = num;
-					sedoku_table[i][2][p][q] = num;
-				}
-			}
-		}
-	}
-
-	// 끝
-
-	//각요소들에 대해 백트래킹으로 돌리고 그값을 받아온는 부분
-	for (int q = 0; q < 15; q++) {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (sedoku_table[q][1][i][j] == 0) xy.push_back(make_pair(i, j));
-			}
-		}
-		dfs(0, q);
-		xy.clear();
-		vector<pair<int, int>>().swap(xy);//vector 초기화
-		istrue = false;
-
-	}
-}
-int keyControl()
-{
-	char temp = _getch();
-
-	if (temp == 'w' || temp == 'W')
-	{
-		return UP;
-	}
-	else if (temp == 'a' || temp == 'A')
-	{
-		return LEFT;
-	}
-	else if (temp == 's' || temp == 'S')
-	{
-		return DOWN;
-	}
-	else if (temp == 'd' || temp == 'D')
-	{
-		return RIGHT;
-	}
-	else if (temp == ' ')
-	{
-		return SUBMIT;
-	}
-}
-
-void init() // 콘솔 창 설정 함수 
-{
-	system("mode con cols=100 lines=20 | title 게 임 제 목"); // 창 넓이
-
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
-	CONSOLE_CURSOR_INFO ConsoleCursor;
-	ConsoleCursor.bVisible = 0;
-	ConsoleCursor.dwSize = 1;
-	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
-}
-void CursorView()
-{
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // 커서 숨김 처리
-	CONSOLE_CURSOR_INFO ConsoleCursor;
-	ConsoleCursor.bVisible = true;
-	ConsoleCursor.dwSize = 1;
-	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
-}
-
-void textcolor(int color_number) // 문자 색상 변경 실수
-{
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
-}
-
-void titleDraw()
-{
-	printf("\n\n\n\n");
-	printf("   ■■■     ■■■■   ■■■       ■■     ■   ■   ■    ■     \n");
-	printf("  ■          ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
-	printf("   ■■■     ■■■■   ■    ■   ■    ■   ■■      ■    ■     \n");
-	printf("         ■   ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
-	printf("   ■■■     ■■■■    ■■■      ■■     ■   ■     ■■       \n");
-}
-
-int menuDraw()
-{
-	int x = 24;
-	int y = 12;
-	gotoxy(x - 2, y); // -2 한 이유는 > 를 출력해야하기 때문에
-	printf("> 게임시작");
-	gotoxy(x, y + 1);
-	printf("게임정보");
-	gotoxy(x, y + 2);
-	printf("종료");
-
-	while (1)
-	{ // 무한반복
-		int n = keyControl();
-		switch (n) {
-		case UP: { //입력한 키와 값이 UP인 경우 (w)
-			if (y > 12) {
-				gotoxy(x - 2, y);
-				printf(" ");
-				gotoxy(x - 2, --y);
-				printf(">");
-			}
-			break;
-		}
-
-		case DOWN: {
-			if (y < 14) {
-				gotoxy(x - 2, y);
-				printf(" ");
-				gotoxy(x - 2, ++y);
-				printf(">");
-			}
-			break;
-		}
-
-		case SUBMIT: {
-			return y - 12; }
-		}
-	}
-}
-
-int maplistDraw() {
-	int x = 24;
-	int y = 6;
-	system("cls");
-	printf("\n\n");
-	printf("                     [ 맵 선택 ]\n\n");
-
-	gotoxy(x - 2, y);
-	printf("> 쉬움");
-	gotoxy(x, y + 1);
-	printf("중간");
-	gotoxy(x, y + 2);
-	printf("어려움");
-	gotoxy(x, y + 3);
-	printf("뒤로");
-
-	while (1) {
-		int n = keyControl();
-		switch (n) {
-		case UP: {
-			if (y > 6) {
-				gotoxy(x - 2, y);
-				printf(" ");
-				gotoxy(x - 2, --y);
-				printf(">");
-			}
-			break;
-		}
-		case DOWN: {
-			if (y < 9) {
-				gotoxy(x - 2, y);
-				printf(" ");
-				gotoxy(x - 2, ++y);
-				printf(">");
-			}
-			break;
-		}
-
-		case SUBMIT: {
-			return y - 6;
-		}
-		}
-	}
-}
-
-void infoDraw() {
-	system("cls"); //화면 모두 지우기
-	printf("게임설명");
-
-	while (1) {
-		if (keyControl() == SUBMIT) {
-			break;
-		}
-	}
-}
-
+//끝
 void cheat(int num) {
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
