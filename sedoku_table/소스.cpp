@@ -574,33 +574,36 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 				
 				gotoxy(x, y + 6);
 				printf("난이도 : 쉬움");
-				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 7);
+				printf("경과시간: %0.3lf\n", gametime);
+				gotoxy(x, y + 9);
 				printf("남은 힌트 횟수 : %d", hint_count_easy);
 				ablenum(x, y);
-				gotoxy(x, y + 11);
+				gotoxy(x, y + 12);
 				printf("메인 메뉴 : m");
 			}
 
 			else if (sedoku_quiz / 5 == 1) {
 				gotoxy(x, y + 6);
 				printf("난이도 : 중간");
-				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 7);
+				printf("경과시간: %0.3lf\n", gametime);
+				gotoxy(x, y + 9);
 				printf("남은 힌트 횟수 : %d", hint_count_medium);
 				ablenum(x, y);
-				gotoxy(x, y + 11);
+				gotoxy(x, y + 12);
 				printf("메인 메뉴 : m");
 			}
 
 			else {
 				gotoxy(x, y + 6);
 				printf("난이도 : 어려움");
-				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 7);
+				printf("경과시간: %0.3lf\n", gametime);
+				gotoxy(x, y + 9);
 				printf("남은 힌트 횟수 : %d", hint_count_hard);
 				ablenum(x, y);
-				gotoxy(x, y + 11);
+				gotoxy(x, y + 12);
 				printf("메인 메뉴 : m");
 			}
 		}
