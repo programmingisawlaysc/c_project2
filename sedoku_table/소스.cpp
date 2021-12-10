@@ -581,6 +581,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 			else if (sedoku_quiz / 5 == 1) {
 				gotoxy(x, y + 6);
 				printf("난이도 : 중간");
+				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d", hint_count_medium);
 				ablenum(x, y);
@@ -591,6 +592,7 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 			else {
 				gotoxy(x, y + 6);
 				printf("난이도 : 어려움");
+				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d", hint_count_hard);
 				ablenum(x, y);
@@ -821,7 +823,7 @@ void gamedraw(int n) {
 	if (count(sedoku_quiz) == false) {
 
 		while (finished[sedoku_quiz] == true) {
-			sedoku_quiz = rand() % 5;
+			sedoku_quiz = rand() % 5  + sedokuarr[n] * 5;
 		}
 		system("cls");
 
@@ -844,19 +846,24 @@ void gamedraw(int n) {
 		*sedokuhint[n] = hintcount[n];
 		timeend = clock();
 		result = false;
-		timeresult = (double)(timestart) / CLOCKS_PER_SEC;
-		printf("경과시간: %0.3lf\n", timeresult);
+		timeresult = (double)(gametime) / CLOCKS_PER_SEC;
+		printf("경과시간: %0.3lf\n", gametime);
 		printf("스도쿠를 성공하셨습니다\n");
 		printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 
 		Sleep(1000);
-		timeend = clock();
-		timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-		printf("경과시간: %0.3lf\n", timeresult);
+		
 		getchar();
 
 
 		system("cls");
+	}
+	else {
+		system("cls");
+		cout << "더 풀 문제가  없습니다. 다른 문제를 선택하세요";
+		getchar();
+		system("cls");
+		
 	}
 	
 
