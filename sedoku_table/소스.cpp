@@ -815,7 +815,9 @@ void gamedraw(int n) {
 	find_sedoku();
 	srand(time(NULL));
 	char key;
-	int x = 3, y = 2;
+	int xx= 3, yy= 2;
+	numx = 0;
+	numy = 0;
 	int sedokuarr[3] = { 0,1,2 };
 	int* sedokuhint[3] = { &hint_count_easy, &hint_count_medium, &hint_count_hard };
 	int hintcount[3] = { 3,2,1 };
@@ -826,7 +828,7 @@ void gamedraw(int n) {
 			sedoku_quiz = rand() % 5  + sedokuarr[n] * 5;
 		}
 		system("cls");
-
+		
 		timestart = clock();
 		timeend = clock();
 
@@ -835,9 +837,9 @@ void gamedraw(int n) {
 			timestart = clock() - timeend;
 			gametime = (double)(timestart) / CLOCKS_PER_SEC;
 			draw_plate(9, 9);
-			gotoxy(x, y);
+			gotoxy(xx, yy);
 			key = _getch();
-			move_arrow_key(key, &x, &y, X_MAX, Y_MAX);
+			move_arrow_key(key, &xx, &yy, X_MAX, Y_MAX);
 			Sleep(10);
 			system("cls");
 			result = abc(sedoku_quiz);
