@@ -29,10 +29,10 @@ void dfs(int cnt, int count_num);
 void find_sedoku();
 void cheat(int num);
 void ablenum(int x, int y);
+
 clock_t timestart, timeend;
 double timeresult;
 double gametime;
-
 enum {
 	BLAK,
 	DARK_BLUE,
@@ -150,6 +150,7 @@ int main() {
 					system("cls");
 
 					while (result != true) {
+
 						draw_plate(9, 9);
 						gotoxy(x, y);
 						key = _getch();
@@ -159,25 +160,17 @@ int main() {
 						result = abc(sedoku_quiz);
 						timestart = clock();
 						gametime = (double)(timestart) / CLOCKS_PER_SEC;
+
 					}
 					hint_count_easy = 3;
-					timeend = clock();
-					timeresult = (double)(timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 					printf("스도쿠를 성공하셨습니다\n");
 					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 					getchar();
 					system("cls");
 					result = false;
 					Sleep(1000);
-					timeend = clock();
-					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 				}
 				else {
-					timeend = clock();
-					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 					printf("더이상 풀문제가 없습니다.");
 					getchar();
 					system("cls");
@@ -193,6 +186,7 @@ int main() {
 					}
 					system("cls");
 					while (result != true) {
+
 						draw_plate(9, 9);
 						gotoxy(x, y);
 						key = _getch();
@@ -200,19 +194,8 @@ int main() {
 						Sleep(10);
 						system("cls");
 						result = abc(sedoku_quiz);
-						timestart = clock();
-						gametime = (double)(timestart) / CLOCKS_PER_SEC;
-						if (key = 109)
-						{
-							titleDraw();
-							menuDraw();
-							break;
-						}
 					}
 					hint_count_medium = 2;
-					timeend = clock();
-					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 					printf("스도쿠를 성공하셨습니다\n");
 					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 					getchar();
@@ -221,9 +204,6 @@ int main() {
 					Sleep(1000);
 				}
 				else {
-					timeend = clock();
-					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 					printf("더이상 풀문제가 없습니다.");
 					getchar();
 					system("cls");
@@ -241,6 +221,7 @@ int main() {
 						sedoku_quiz = rand() % 5 + 10;
 					}
 					while (result != true) {
+
 						draw_plate(9, 9);
 						gotoxy(x, y);
 						key = _getch();
@@ -248,20 +229,9 @@ int main() {
 						Sleep(10);
 						system("cls");
 						result = abc(sedoku_quiz);
-						timestart = clock();
-						gametime = (double)(timestart) / CLOCKS_PER_SEC;
-						if (key = 109)
-						{
-							titleDraw();
-							menuDraw();
-							break;
-						}
 
 					}
 					hint_count_hard = 1;
-					timeend = clock();
-					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 					printf("스도쿠를 성공하셨습니다\n");
 					printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
 					getchar();
@@ -271,9 +241,6 @@ int main() {
 				}
 
 				else {
-					timeend = clock();
-					timeresult = (double)(timeend - timestart) / CLOCKS_PER_SEC;
-					printf("경과시간: %0.3lf\n", timeresult);
 					printf("더이상 풀문제가 없습니다.");
 					getchar();
 					system("cls");
@@ -296,8 +263,6 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	int i, j;
 	unsigned char a = 0xa6;
 	unsigned char b[12];
-
-	SetColor(W_Color);
 	for (i = 1; i < 12; i++) // 스도쿠 테두리 모양 저장 ex) {"┏", "━", "┯", "┓"},
 	{
 		b[i] = 0xa0 + i;
@@ -377,7 +342,6 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 	printf("\n");
 	{
 		{
-			SetColor(G_Color);
 			int x = 40;
 			int y = 2;
 			printf("\n");
@@ -390,12 +354,12 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 			printf("칸 이동 : 화살표 키\n");
 			gotoxy(x, y + 4);
 			printf("힌트 : c\n");
-			gotoxy(x, y + 15);
-			printf("경과시간: %0.3lf\n", gametime);
+
 
 			if (sedoku_quiz == 0 || sedoku_quiz == 1 || sedoku_quiz == 2 || sedoku_quiz == 3 || sedoku_quiz == 4) {
 				gotoxy(x, y + 6);
 				printf("난이도 : 쉬움");
+				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 7);
 				printf("남은 힌트 횟수 : %d", hint_count_easy);
 				ablenum(x, y);
@@ -606,6 +570,18 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else {
 			break;
 		}
+	case 109:  // m 입력 -> 메인화면
+		if (true)
+		{
+			cheat(sedoku_quiz);
+			break;
+
+		}
+		else
+		{
+			break;
+		}
+
 
 	default:
 		return;
@@ -821,7 +797,6 @@ void textcolor(int color_number) // 문자 색상 변경 실수
 
 void titleDraw()
 {
-	SetColor(W_Color);
 	printf("\n\n\n\n");
 	printf("   ■■■     ■■■■   ■■■       ■■     ■   ■   ■    ■     \n");
 	printf("  ■          ■         ■    ■   ■    ■   ■ ■     ■    ■     \n");
