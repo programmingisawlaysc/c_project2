@@ -308,7 +308,11 @@ void find_sedoku() {
 //게임 시작 함수
 void infoDraw() {
 	system("cls"); //화면 모두 지우기
-	printf("게임설명");
+	printf("게임설명\n");
+	printf("스도쿠는 가로줄과 세로줄에서 겹치는 숫자 없이 1부터 9까지 입력하는 게임입니다.\n");
+	printf("메인화면과 난이도 선택화면에서는 WASD로 방향을 움직입니다. 스페이스바로 선택할 수 있습니다.\n");
+	printf("게임화면에서는 방향키로 방향을 움직입니다.\n");
+	printf("0으로 표시된 칸에 숫자를 입력할 수 있습니다.\n");
 
 	while (1) {
 		if (keyControl() == SUBMIT) {
@@ -783,19 +787,6 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else {
 			break;
 		}
-	case 109:  // m 입력 -> 메인화면
-		if (true)
-		{
-			cheat(sedoku_quiz);
-			break;
-
-		}
-		else
-		{
-			break;
-		}
-
-
 	default:
 		return;
 	}
@@ -844,6 +835,10 @@ void gamedraw(int n) {
 			system("cls");
 			result = abc(sedoku_quiz);
 			timestart = clock();
+			if (key == 109)
+			{
+				return;
+			}
 		}
 		*sedokuhint[n] = hintcount[n];
 		timeend = clock();
