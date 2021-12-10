@@ -806,6 +806,9 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 
 
 void gamedraw(int n) {
+	if (n == 3) {
+		return;
+	}
 
 	find_sedoku();
 	srand(time(NULL));
@@ -855,6 +858,7 @@ void gamedraw(int n) {
 
 		system("cls");
 	}
+	
 
 }
 
