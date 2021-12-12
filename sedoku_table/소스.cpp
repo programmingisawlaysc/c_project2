@@ -8,6 +8,8 @@
 #include<utility>
 #include<string>
 #include <time.h>
+#include <mmsystem.h>
+#include <tchar.h>
 using namespace std;
 /*함수 선언*/
 int keyControl();
@@ -32,7 +34,10 @@ void find_sedoku();
 void cheat(int num);
 void ablenum(int x, int y);
 void gamedraw(int n);
-
+void sound_button_change();
+void sound_button_change2();
+void sound_button_click();
+void sound_success();
 
 
 clock_t timestart, timeend;
@@ -322,6 +327,7 @@ void infoDraw() {
 
 	while (1) {
 		if (keyControl() == SUBMIT) {
+			sound_button_click(); //소리 재생
 			break;
 		}
 	}
@@ -404,6 +410,7 @@ int menuDraw()
 		switch (n) {
 		case UP: { //입력한 키와 값이 UP인 경우 (w)
 			if (y > 12) {
+				sound_button_change(); //소리 재생
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, --y);
@@ -414,6 +421,7 @@ int menuDraw()
 
 		case DOWN: {
 			if (y < 14) {
+				sound_button_change(); //소리 재생
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, ++y);
@@ -423,6 +431,7 @@ int menuDraw()
 		}
 
 		case SUBMIT: {
+			sound_button_click(); //소리 재생
 			return y - 12; }
 		}
 	}
@@ -449,6 +458,7 @@ int maplistDraw() {
 		switch (n) {
 		case UP: {
 			if (y > 6) {
+				sound_button_change(); //소리 재생
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, --y);
@@ -458,6 +468,7 @@ int maplistDraw() {
 		}
 		case DOWN: {
 			if (y < 9) {
+				sound_button_change(); //소리 재생
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, ++y);
@@ -467,6 +478,7 @@ int maplistDraw() {
 		}
 
 		case SUBMIT: {
+			sound_button_click(); //소리 재생
 			return y - 6;
 		}
 		}
@@ -644,7 +656,6 @@ void buff_sedoku_print(int j, int i, int num) {
 	}
 	gotoxy(x, y + 7);
 	printf("경과시간: %0.3lf\n", gametime);
-	ablenum(x, y);
 	gotoxy(x, y + 12);
 	printf("메인 메뉴 : m");
 	
@@ -655,6 +666,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 	switch (key)
 	{
 	case 72:// 위쪽(상) 방향의 화살표 키 입력
+		sound_button_change(); //소리 재생
 		*y1 = *y1 - 2;
 		if (*y1 < 2) {
 			*y1 = 2; // y좌표의 최솟값
@@ -666,6 +678,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 		}
 	case 75:// 왼쪽(좌) 방향의 화살표 키 입력
+		sound_button_change(); //소리 재생
 		*x1 = *x1 - 4;
 		if (*x1 < 3) {
 			*x1 = 3; // x 좌표의 최솟값
@@ -677,6 +690,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 		}
 	case 77:// 오른쪽(우) 방향의 화살표 키 입력
+		sound_button_change(); //소리 재생
 		*x1 = *x1 + 4;
 		if (*x1 > x_b) {
 			*x1 = x_b; // x 좌표의 최대값
@@ -688,6 +702,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 		}
 	case 80:// 아래쪽(하) 방향의 화살표 키 입력
+		sound_button_change(); //소리 재생
 		*y1 = *y1 + 2;
 		if (*y1 > y_b) {
 			*y1 = y_b;// y 좌표의 최대값
@@ -699,6 +714,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 			break;
 		}
 	case 48: //숫자키 0 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 0;  //해당하는 배열의 수를 0로 변경
@@ -707,6 +723,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 49: //숫자키 1 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 1;  //해당하는 배열의 수를 1로 변경
@@ -715,6 +732,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 50: //숫자키 2 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 2;  //해당하는 배열의 수를 2로 변경
@@ -723,6 +741,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 51: //숫자키 3 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 3;  //해당하는 배열의 수를 3로 변경
@@ -731,6 +750,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 52: //숫자키 4 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 4;  //해당하는 배열의 수를 4로 변경
@@ -739,6 +759,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 53: //숫자키 5 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 5;  //해당하는 배열의 수를 5로 변경
@@ -747,6 +768,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 54: //숫자키 6 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 6;  //해당하는 배열의 수를 6로 변경
@@ -755,6 +777,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 55: //숫자키 7 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 7;  //해당하는 배열의 수를 7로 변경
@@ -763,6 +786,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 56: //숫자키 8 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 8;  //해당하는 배열의 수를 8로 변경
@@ -771,6 +795,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		else
 			break;
 	case 57: //숫자키 9 입력
+		sound_button_change2(); //소리 재생
 		if (sedoku_table[sedoku_quiz][sedoku_default][numy][numx] == 0) //배열의 수가 0일 경우
 		{
 			sedoku_table[sedoku_quiz][sedoku_change][numy][numx] = 9;  //해당하는 배열의 수를 9로 변경
@@ -782,6 +807,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 	case 99: //영어 c 버튼 입력
 		if (sedoku_quiz /5 == 0 ) //난이도 쉬움일 경우
 		{
+			sound_button_change2(); //소리 재생
 			if (hint_count_easy == 0)
 				break;
 			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //배열의 수가 정답이 아닐 경우
@@ -795,6 +821,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		if (sedoku_quiz/5 == 1) //난이도 중간일 경우
 		{
+			sound_button_change2(); //소리 재생
 			if (hint_count_medium == 0)
 				break;
 			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //배열의 수가 정답이 아닐 경우
@@ -808,6 +835,7 @@ void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
 		}
 		if (sedoku_quiz / 5 == 2) //난이도 어려움일 경우
 		{
+			sound_button_change2(); //소리 재생
 			if (hint_count_hard == 0)
 				break;
 			else if (sedoku_table[sedoku_quiz][sedoku_change][numy][numx] != sedoku_table[sedoku_quiz][sedoku_answer][numy][numx]) //배열의 수가 정답이 아닐 경우
@@ -877,6 +905,7 @@ void gamedraw(int n) {
 				plate_printed++;
 			} else {
 				buffer_print(sedoku_table);
+				ablenum(45,2);
 			}
 			gotoxy(xx, yy);
 			key = _getch();
@@ -886,6 +915,7 @@ void gamedraw(int n) {
 			timestart = clock();
 			if (key == 109)
 			{
+				sound_button_click(); //소리 재생
 				return;
 			}
 		}
@@ -894,15 +924,16 @@ void gamedraw(int n) {
 		timeend = clock();
 		result = false;
 		timeresult = (double)(gametime) / CLOCKS_PER_SEC;
+		sound_success(); //성공 소리 재생
 		printf("경과시간: %0.3lf\n", gametime);
 		printf("스도쿠를 성공하셨습니다\n");
 		printf("아무키나 입력하여 메뉴화면으로 돌아가십시요");
-
 		Sleep(1000);
-		
 		getchar();
+		sound_button_click(); //소리 재생
 	}
 	else {
+		sound_success(); //성공 소리 재생
 		system("cls");
 		cout << "더 풀 문제가  없습니다. 다른 문제를 선택하세요";
 		getchar();
@@ -921,4 +952,20 @@ void cheat(int num) {
 		}
 	}
 
+}
+
+void sound_button_change() {
+	PlaySound(_T("button_change.wav"), NULL, SND_FILENAME | SND_ASYNC);
+}
+
+void sound_button_change2() {
+	PlaySound(_T("button_change2.wav"), NULL, SND_FILENAME | SND_ASYNC);
+}
+
+void sound_button_click() {
+	PlaySound(_T("button_click.wav"), NULL, SND_FILENAME | SND_ASYNC);
+}
+
+void sound_success() {
+	PlaySound(_T("success.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
