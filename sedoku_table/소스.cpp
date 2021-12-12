@@ -19,6 +19,8 @@ int maplistDraw();
 void infoDraw();
 void CursorView();
 extern void draw_plate(int column, int row);
+void buffer_print(int sedoku_table[16][3][9][9]);
+void buff_sedoku_print(int j, int i, int num);
 void move_arrow_key(char chr, int* x, int* y, int x_b, int y_b);
 void gotoxy(int x, int y);
 void print_sedoku(int count_num);
@@ -30,6 +32,8 @@ void find_sedoku();
 void cheat(int num);
 void ablenum(int x, int y);
 void gamedraw(int n);
+
+
 
 clock_t timestart, timeend;
 double timeresult;
@@ -64,6 +68,7 @@ void SetColor(int color)
 }
 
 int sedoku_table[16][3][9][9];
+int front_buffer[16][1][9][9];
 vector<pair<int, int>> xy;
 vector<string>  sedoku_set[16];
 bool finished[15] = { false ,false, false, false, false, false, false, false, false, false, false, false, false, false, false };
@@ -137,7 +142,7 @@ int main() {
 
 			int q = maplistDraw();
 			gamedraw(q);
-			system("cls");
+			//system("cls");
 			
 		}
 		else if (menuCode == 1) {
@@ -146,7 +151,7 @@ int main() {
 		else if (menuCode == 2) {
 			return 0; //종료
 		}
-		system("cls");
+		//system("cls");
 	}
 	return 0;
 }
@@ -208,8 +213,8 @@ void ablenum(int x, int y) {
 			if (canable[i] == false) {
 				cout << i + 1 << ' ';
 			}
-
 		}
+		cout << "                       ";
 	}
 
 
@@ -277,6 +282,7 @@ void find_sedoku() {
 					sedoku_table[i][j][p][q] = num;
 					sedoku_table[i][1][p][q] = num;
 					sedoku_table[i][2][p][q] = num;
+					front_buffer[i][0][p][q] = sedoku_table[i][2][p][q];
 				}
 			}
 		}
@@ -571,43 +577,77 @@ void draw_plate(int column, int row) // 스도쿠 판 출력 함수
 
 
 			if (sedoku_quiz / 5 == 0) {
-				
 				gotoxy(x, y + 6);
 				printf("난이도 : 쉬움");
-				gotoxy(x, y + 7);
-				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 9);
 				printf("남은 힌트 횟수 : %d", hint_count_easy);
-				ablenum(x, y);
-				gotoxy(x, y + 12);
-				printf("메인 메뉴 : m");
-			}
-
-			else if (sedoku_quiz / 5 == 1) {
+			} else if (sedoku_quiz / 5 == 1) {
 				gotoxy(x, y + 6);
 				printf("난이도 : 중간");
-				gotoxy(x, y + 7);
-				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 9);
 				printf("남은 힌트 횟수 : %d", hint_count_medium);
-				ablenum(x, y);
-				gotoxy(x, y + 12);
-				printf("메인 메뉴 : m");
-			}
-
-			else {
+			} else {
 				gotoxy(x, y + 6);
 				printf("난이도 : 어려움");
-				gotoxy(x, y + 7);
-				printf("경과시간: %0.3lf\n", gametime);
 				gotoxy(x, y + 9);
 				printf("남은 힌트 횟수 : %d", hint_count_hard);
-				ablenum(x, y);
-				gotoxy(x, y + 12);
-				printf("메인 메뉴 : m");
 			}
+			gotoxy(x, y + 7);
+			printf("경과시간: %0.3lf\n", gametime);
+			ablenum(x, y);
+			gotoxy(x, y + 12);
+			printf("메인 메뉴 : m");
 		}
 	}
+}
+
+void buffer_print(int sedoku_table[][3][9][9]) {
+	int i, j, j2, i2;
+	for (i = 0, i2 = 2; i < 9; i++) {
+		for (j = 0, j2 = 4; j < 9; j++)
+		{
+			if (front_buffer[sedoku_quiz][0][i][j] != sedoku_table[sedoku_quiz][2][i][j])
+			{
+				buff_sedoku_print(j2, i2, sedoku_table[sedoku_quiz][2][i][j]);
+				front_buffer[sedoku_quiz][0][i][j] = sedoku_table[sedoku_quiz][2][i][j];
+			}
+			j2 += 4;
+		}
+		i2 += 2;
+	}
+}
+
+void buff_sedoku_print(int j, int i, int num) {
+	gotoxy(j, i);
+	textcolor(14); //14: 노란색
+	printf("\b%d", num);
+	textcolor(15); //15: 흰색
+	int x = 45;
+	int y = 2;
+	if (sedoku_quiz / 5 == 0) {
+		gotoxy(x, y + 6);
+		printf("난이도 : 쉬움");
+		gotoxy(x, y + 9);
+		printf("남은 힌트 횟수 : %d", hint_count_easy);
+	}
+	else if (sedoku_quiz / 5 == 1) {
+		gotoxy(x, y + 6);
+		printf("난이도 : 중간");
+		gotoxy(x, y + 9);
+		printf("남은 힌트 횟수 : %d", hint_count_medium);
+	}
+	else {
+		gotoxy(x, y + 6);
+		printf("난이도 : 어려움");
+		gotoxy(x, y + 9);
+		printf("남은 힌트 횟수 : %d", hint_count_hard);
+	}
+	gotoxy(x, y + 7);
+	printf("경과시간: %0.3lf\n", gametime);
+	ablenum(x, y);
+	gotoxy(x, y + 12);
+	printf("메인 메뉴 : m");
+	
 }
 
 void move_arrow_key(char key, int* x1, int* y1, int x_b, int y_b)
@@ -815,6 +855,7 @@ void gamedraw(int n) {
 	int sedokuarr[3] = { 0,1,2 };
 	int* sedokuhint[3] = { &hint_count_easy, &hint_count_medium, &hint_count_hard };
 	int hintcount[3] = { 3,2,1 };
+	int plate_printed = 0;
 	sedoku_quiz = rand() % 5 + sedokuarr[n] * 5;
 	if (count(sedoku_quiz) == false) {
 
@@ -830,12 +871,17 @@ void gamedraw(int n) {
 
 			timestart = clock() - timeend;
 			gametime = (double)(timestart) / CLOCKS_PER_SEC;
-			draw_plate(9, 9);
+			if (plate_printed < 3) {
+				system("cls");
+				draw_plate(9, 9);
+				plate_printed++;
+			} else {
+				buffer_print(sedoku_table);
+			}
 			gotoxy(xx, yy);
 			key = _getch();
 			move_arrow_key(key, &xx, &yy, X_MAX, Y_MAX);
 			Sleep(10);
-			system("cls");
 			result = abc(sedoku_quiz);
 			timestart = clock();
 			if (key == 109)
@@ -843,6 +889,7 @@ void gamedraw(int n) {
 				return;
 			}
 		}
+		system("cls");
 		*sedokuhint[n] = hintcount[n];
 		timeend = clock();
 		result = false;
@@ -854,9 +901,6 @@ void gamedraw(int n) {
 		Sleep(1000);
 		
 		getchar();
-
-
-		system("cls");
 	}
 	else {
 		system("cls");
