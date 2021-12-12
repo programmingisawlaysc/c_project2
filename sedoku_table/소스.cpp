@@ -656,7 +656,6 @@ void buff_sedoku_print(int j, int i, int num) {
 	}
 	gotoxy(x, y + 7);
 	printf("경과시간: %0.3lf\n", gametime);
-	ablenum(x, y);
 	gotoxy(x, y + 12);
 	printf("메인 메뉴 : m");
 	
@@ -906,6 +905,7 @@ void gamedraw(int n) {
 				plate_printed++;
 			} else {
 				buffer_print(sedoku_table);
+				ablenum(45,2);
 			}
 			gotoxy(xx, yy);
 			key = _getch();
