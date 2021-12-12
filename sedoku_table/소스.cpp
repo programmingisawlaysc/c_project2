@@ -142,7 +142,7 @@ int main() {
 
 			int q = maplistDraw();
 			gamedraw(q);
-			//system("cls");
+			system("cls");
 			
 		}
 		else if (menuCode == 1) {
@@ -151,7 +151,7 @@ int main() {
 		else if (menuCode == 2) {
 			return 0; //Á¾·á
 		}
-		//system("cls");
+		system("cls");
 	}
 	return 0;
 }
